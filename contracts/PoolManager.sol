@@ -1,0 +1,257 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
+
+import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
+import '@openzeppelin/contracts/access/Ownable2Step.sol';
+import '@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol';
+import '@uniswap/v3-periphery/contracts/libraries/TransferHelper.sol';
+import './INonfungiblePositionManager.sol';
+import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
+import './IUNCX_LiquidityLocker_UniV3.sol';
+import '@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol';
+import './ITreasuryPool.sol';
+import './IUserDolGlobal.sol';
+import './IManager.sol';
+import './IUniswapOracle.sol';
+import 'hardhat/console.sol';
+enum PoolType {
+    TREASURY,
+    RECHARGE,
+    DEVS,
+    MARKETING
+}
+contract PoolManager is Ownable2Step {
+    using SafeERC20 for IERC20;
+    IERC20 immutable dolToken;
+    IERC20 immutable usdt;
+    INonfungiblePositionManager public immutable nonfungiblePositionManager;
+    IUNCX_LiquidityLocker_UniV3 public immutable unicryptLocker;
+    ITreasuryPool public treasuryPool;
+    IUserDolGlobal public immutable userDolGlobal;
+    IManager public devPool;
+    IManager public marketingPool;
+    address public rechargePool;
+    address public reservePool = 0x67BAE7b8022c2ac776f47e65f99CD28311519B1D;
+    address public reservePool2 = 0xF4F036285b30A1ac4352b58591746d46cfc6fDdD;
+
+    ISwapRouter public immutable swapRouter;
+    IUniswapOracle public oracle;
+
+    uint public liquidityPoolUniswapId;
+    uint public lockPoolId;
+
+    event SetPoolLock(uint lockId);
+    event SetPoolUniswap(uint poolId);
+
+    constructor(
+        address _dolToken,
+        address _usdt,
+        address _userDolGlobal
+    ) Ownable(msg.sender) {
+        require(_usdt != address(0), 'Invalid usdt contract');
+        require(_userDolGlobal != address(0), 'Invalid user contract');
+        require(_dolToken != address(0), 'Invalid dol contract');
+        nonfungiblePositionManager = INonfungiblePositionManager(
+            0xC36442b4a4522E871399CD717aBDD847Ab11FE88
+        );
+        unicryptLocker = IUNCX_LiquidityLocker_UniV3(
+            0x40f6301edb774e8B22ADC874f6cb17242BaEB8c4
+        );
+        swapRouter = ISwapRouter(0xE592427A0AEce92De3Edee1F18E0157C05861564);
+        dolToken = IERC20(_dolToken);
+        userDolGlobal = IUserDolGlobal(_userDolGlobal);
+
+        usdt = IERC20(_usdt);
+    }
+    function sendToReservePool(uint amount) external {
+        usdt.safeTransferFrom(msg.sender, address(this), amount);
+        usdt.safeTransfer(reservePool, (amount * 8) / 10);
+        usdt.safeTransfer(reservePool2, (amount * 2) / 10);
+    }
+    function setUniswapOracle(address _oracle) external onlyOwner {
+        oracle = IUniswapOracle(_oracle);
+    }
+
+    function increaseLiquidityPool1(uint amount) public {
+        dolToken.safeTransferFrom(msg.sender, address(this), amount);
+        dolToken.approve(address(treasuryPool), amount);
+        treasuryPool.addDistributionFunds(amount);
+    }
+    function increaseLiquidityPool2(uint amount) external {
+        dolToken.safeTransferFrom(msg.sender, address(this), amount);
+        dolToken.safeTransfer(rechargePool, amount);
+    }
+
+    function increaseLiquidityDevPool(
+        uint amount,
+        address tokenContract
+    ) external {
+        IERC20(tokenContract).safeTransferFrom(
+            msg.sender,
+            address(this),
+            amount
+        );
+
+        IERC20(tokenContract).approve(address(devPool), amount);
+        devPool.incrementBalance(amount, tokenContract);
+    }
+    function increaseLiquidityMarketingPool(
+        uint amount,
+        address tokenContract
+    ) external {
+        IERC20(tokenContract).safeTransferFrom(
+            msg.sender,
+            address(this),
+            amount
+        );
+
+        IERC20(tokenContract).approve(address(marketingPool), amount);
+
+        marketingPool.incrementBalance(amount, tokenContract);
+    }
+
+    function setLiquidityPoolUniswapId(uint poolId) external onlyOwner {
+        liquidityPoolUniswapId = poolId;
+        emit SetPoolUniswap(poolId);
+    }
+    function isFaceIdVerified(address _user) external view returns (bool) {
+        UserStruct memory user = userDolGlobal.getUser(_user);
+        return user.faceId && user.registered;
+    }
+    function fillTreasuryPoolWithRechargePool(uint amount) external onlyOwner {
+        dolToken.safeTransferFrom(rechargePool, address(this), amount);
+        dolToken.approve(address(treasuryPool), amount);
+
+        treasuryPool.addDistributionFunds(amount);
+    }
+
+    function setLockPoolUniswapId(uint lockId) external onlyOwner {
+        lockPoolId = lockId;
+        emit SetPoolLock(lockId);
+    }
+
+    function collectUniswapFee() external {
+        unicryptLocker.collect(
+            lockPoolId,
+            address(this),
+            type(uint128).max,
+            type(uint128).max
+        );
+        dolToken.approve(address(devPool), dolToken.balanceOf(address(this)));
+        usdt.approve(address(devPool), usdt.balanceOf(address(this)));
+
+        devPool.incrementBalance(
+            dolToken.balanceOf(address(this)),
+            address(dolToken)
+        );
+        devPool.incrementBalance(usdt.balanceOf(address(this)), address(usdt));
+    }
+
+    function setPools(PoolType pool, address _contract) external onlyOwner {
+        require(_contract != address(0), 'Address cannot be zero');
+
+        if (pool == PoolType.TREASURY) {
+            treasuryPool = ITreasuryPool(_contract);
+        } else if (pool == PoolType.RECHARGE) {
+            rechargePool = _contract;
+        } else if (pool == PoolType.DEVS) {
+            devPool = IManager(_contract);
+        } else if (pool == PoolType.MARKETING) {
+            marketingPool = IManager(_contract);
+        } else {
+            revert('Invalid pool type');
+        }
+    }
+
+    function getAmountValue(uint128 amount) external view returns (uint value) {
+        return oracle.returnPrice(amount);
+    }
+
+    function distributeUnilevelUsdt(address user, uint amount) external {
+        usdt.safeTransferFrom(msg.sender, address(this), amount);
+        usdt.approve(address(userDolGlobal), amount);
+        userDolGlobal.distributeUnilevelUsdt(user, amount);
+    }
+    function distributeUnilevelIguality(address user, uint amount) external {
+        usdt.safeTransferFrom(msg.sender, address(this), amount);
+        usdt.approve(address(userDolGlobal), amount);
+        userDolGlobal.distributeUnilevelIguality(user, amount);
+    }
+
+    function swap(
+        address tokenIn,
+        address tokenOut,
+        uint24 fee,
+        uint amount,
+        address recipient
+    ) public returns (uint amountOut) {
+        ISwapRouter.ExactInputSingleParams memory params;
+        IERC20(tokenIn).safeTransferFrom(msg.sender, address(this), amount);
+        IERC20(tokenIn).approve(address(address(swapRouter)), amount);
+
+        params = ISwapRouter.ExactInputSingleParams({
+            tokenIn: tokenIn,
+            tokenOut: tokenOut,
+            fee: fee,
+            recipient: recipient,
+            deadline: block.timestamp + 60,
+            amountIn: amount,
+            amountOutMinimum: 0,
+            sqrtPriceLimitX96: 0
+        });
+
+        amountOut = swapRouter.exactInputSingle(params);
+    }
+
+    function increaseLiquidityPoolUniswap(
+        uint256 amountUsdt,
+        uint amountDol
+    ) external {
+        TransferHelper.safeTransferFrom(
+            address(usdt),
+            msg.sender,
+            address(this),
+            amountUsdt
+        );
+
+        TransferHelper.safeTransferFrom(
+            address(dolToken),
+            msg.sender,
+            address(this),
+            amountDol
+        );
+        uint amountToken0;
+        uint amountToken1;
+
+        INonfungiblePositionManager.Position
+            memory position = nonfungiblePositionManager.positions(
+                liquidityPoolUniswapId
+            );
+
+        if (position.token0 == address(usdt)) {
+            amountToken0 = amountUsdt;
+            amountToken1 = amountDol;
+        } else {
+            amountToken0 = amountDol;
+            amountToken1 = amountUsdt;
+        }
+
+        dolToken.approve(address(nonfungiblePositionManager), amountDol);
+        usdt.approve(address(nonfungiblePositionManager), amountUsdt);
+        INonfungiblePositionManager.IncreaseLiquidityParams
+            memory params = INonfungiblePositionManager
+                .IncreaseLiquidityParams({
+                    tokenId: liquidityPoolUniswapId,
+                    amount0Desired: amountToken0,
+                    amount1Desired: amountToken1,
+                    amount0Min: 0,
+                    amount1Min: 0,
+                    deadline: block.timestamp
+                });
+        (
+            uint newLiquidity,
+            uint amountToken0Added,
+            uint amountToken1Added
+        ) = nonfungiblePositionManager.increaseLiquidity(params);
+    }
+}
