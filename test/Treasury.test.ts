@@ -79,13 +79,14 @@ import { token } from "../typechain-types/@openzeppelin/contracts";
       const devPool = await DevPool.deploy();
       const devPoolAddress = await devPool.getAddress();
       await devPool.addToken(usdtAddress,"USDT")
+      await devPool.addToken(dolGlobalAddress,"DOL")
 
       const MarketingPool = await ethers.getContractFactory("MarketingPool");
       const marketing = await MarketingPool.deploy();
       const marketingAddress = await marketing.getAddress();
       await marketing.addToken(usdtAddress,"USDT")
 
-      const TreasuryPool = await ethers.getContractFactory("TreasuryPool");
+      const TreasuryPool = await ethers.getContractFactory("TreasuryPoolMocked");
       const treasuryPool = await TreasuryPool.deploy(
         dolGlobalAddress,
         usdtAddress,
@@ -141,7 +142,7 @@ import { token } from "../typechain-types/@openzeppelin/contracts";
       await treasuryPool.contribute(1000*10**6)
 
       
-      expect(await rechargePool.getTotalTokens()).to.be.equal(0)
+      expect(await rechargePool.getTotalTokens()).to.be.equal(ethers.parseUnits("49.998"))
       await expect(treasuryPool.contribute(5*10**6)).to.be.revertedWith("Amount must be greater than 10 dollars")
 
       expect((await treasuryPool.getUser(owner.address,1)).balance).to.be.equal(2500*10**6);

@@ -31,8 +31,10 @@ contract PoolManager is Ownable2Step {
     IManager public devPool;
     IManager public marketingPool;
     address public rechargePool;
-    address public reservePool = 0x67BAE7b8022c2ac776f47e65f99CD28311519B1D;
-    address public reservePool2 = 0x6e595E0d3Fa79a4a056e5875f8752225b57A0c9a;
+    address public constant reservePool =
+        0x67BAE7b8022c2ac776f47e65f99CD28311519B1D;
+    address public constant reservePool2 =
+        0x6e595E0d3Fa79a4a056e5875f8752225b57A0c9a;
 
     ISwapRouter public immutable swapRouter;
     IUniswapOracle public oracle;

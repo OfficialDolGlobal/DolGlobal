@@ -70,21 +70,21 @@ contract DolGlobalCollection is
             (amount) / 10,
             address(usdt)
         );
-        // uint amountOut = poolManager.swap(
-        //     address(usdt),
-        //     address(dol),
-        //     10000,
-        //     (amount) / 4,
-        //     address(this)
-        // );
-        // dol.approve(address(poolManager), amountOut);
+        uint amountOut = poolManager.swap(
+            address(usdt),
+            address(dol),
+            10000,
+            (amount) / 4,
+            address(this)
+        );
+        dol.approve(address(poolManager), amountOut);
 
-        // poolManager.increaseLiquidityPool2((amountOut * 80) / 100);
+        poolManager.increaseLiquidityPool2((amountOut * 80) / 100);
 
-        // poolManager.increaseLiquidityPoolUniswap(
-        //     (amount) / 20,
-        //     (amountOut) / 5
-        // );
+        poolManager.increaseLiquidityPoolUniswap(
+            (amount) / 20,
+            (amountOut) / 5
+        );
         users[msg.sender].maxUnilevel += amount * 2;
     }
 

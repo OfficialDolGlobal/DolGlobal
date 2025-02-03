@@ -263,8 +263,10 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     percentage
                 );
-                usdt.approve(address(poolManager), valueToReserve);
-                poolManager.increaseLiquidityReservePool(valueToReserve);
+                if (valueToReserve > 0) {
+                    usdt.approve(address(poolManager), valueToReserve);
+                    poolManager.increaseLiquidityReservePool(valueToReserve);
+                }
 
                 continue;
             }
@@ -274,8 +276,11 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     percentage
                 );
-                usdt.approve(address(poolManager), valueToReserve);
-                poolManager.increaseLiquidityReservePool(valueToReserve);
+                if (valueToReserve > 0) {
+                    usdt.approve(address(poolManager), valueToReserve);
+                    poolManager.increaseLiquidityReservePool(valueToReserve);
+                }
+
                 continue;
             }
             if (isTop5(levels[i])) {
@@ -284,8 +289,10 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     percentage
                 );
-                usdt.approve(address(poolManager), valueToReserve);
-                poolManager.increaseLiquidityReservePool(valueToReserve);
+                if (valueToReserve > 0) {
+                    usdt.approve(address(poolManager), valueToReserve);
+                    poolManager.increaseLiquidityReservePool(valueToReserve);
+                }
                 continue;
             }
             uint value = collection.availableUnilevel(levels[i]);
@@ -388,8 +395,10 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     PERCENTAGE_FIXED
                 );
-                usdt.approve(address(poolManager), valueToReserve);
-                poolManager.increaseLiquidityReservePool(valueToReserve);
+                if (valueToReserve > 0) {
+                    usdt.approve(address(poolManager), valueToReserve);
+                    poolManager.increaseLiquidityReservePool(valueToReserve);
+                }
                 continue;
             }
             if (isG10(levels[i])) {
@@ -398,8 +407,10 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     PERCENTAGE_FIXED
                 );
-                usdt.approve(address(poolManager), valueToReserve);
-                poolManager.increaseLiquidityReservePool(valueToReserve);
+                if (valueToReserve > 0) {
+                    usdt.approve(address(poolManager), valueToReserve);
+                    poolManager.increaseLiquidityReservePool(valueToReserve);
+                }
                 continue;
             }
             if (isTop5(levels[i])) {
@@ -408,8 +419,10 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     PERCENTAGE_FIXED
                 );
-                usdt.approve(address(poolManager), valueToReserve);
-                poolManager.increaseLiquidityReservePool(valueToReserve);
+                if (valueToReserve > 0) {
+                    usdt.approve(address(poolManager), valueToReserve);
+                    poolManager.increaseLiquidityReservePool(valueToReserve);
+                }
                 continue;
             }
             uint value = collection.availableUnilevel(levels[i]);

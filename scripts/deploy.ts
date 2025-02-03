@@ -1,4 +1,4 @@
-import { ethers } from "ethers";
+import { ethers } from "hardhat";
 import { exec } from 'child_process';
 import userAbi from './user.abi.json'
 enum PoolType {
@@ -38,48 +38,48 @@ async function main() {
 
       // await runCommand(oracleAddress,[])
 
-    //   const paramsTop5 = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa"]
-    //   const Top5 = await ethers.getContractFactory("Top5");
-    //   const top1 = await Top5.deploy(paramsTop5[0]);
-    //   await top1.waitForDeployment()
-    //   const top1Address = await top1.getAddress();
-    //   console.log("top1Address: ",top1Address);
-    //   await runCommand(top1Address,[paramsTop5[0]])
-    //   const top2 = await Top5.deploy(paramsTop5[0]);
-    //   await top2.waitForDeployment()
-    //   const top2Address = await top2.getAddress();
-    //   console.log("top2Address: ",top2Address);
-    //   await runCommand(top2Address,[paramsTop5[0]])
-    //   const top3 = await Top5.deploy(paramsTop5[0]);
-    //   await top3.waitForDeployment()
-    //   const top3Address = await top3.getAddress();
-    //   console.log("top3Address: ",top3Address);
-    //   await runCommand(top3Address,[paramsTop5[0]])
-    //   const top4 = await Top5.deploy(paramsTop5[0]);
-    //   await top4.waitForDeployment()
-    //   const top4Address = await top4.getAddress();
-    //   console.log("top4Address: ",top4Address);
-    //   await runCommand(top4Address,[paramsTop5[0]])
-    //   const top5 = await Top5.deploy(paramsTop5[0]);
-    //   await top5.waitForDeployment()
-    //   const top5Address = await top5.getAddress();
-    //   console.log("top5Address: ",top5Address);
-    //   await runCommand(top5Address,[paramsTop5[0]])
+      // const paramsTop5 = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa"]
+      // const Top5 = await ethers.getContractFactory("Top5");
+      // const top1 = await Top5.deploy(paramsTop5[0]);
+      // await top1.waitForDeployment()
+      // const top1Address = await top1.getAddress();
+      // console.log("top1Address: ",top1Address);
+      // await runCommand(top1Address,[paramsTop5[0]])
+      // const top2 = await Top5.deploy(paramsTop5[0]);
+      // await top2.waitForDeployment()
+      // const top2Address = await top2.getAddress();
+      // console.log("top2Address: ",top2Address);
+      // await runCommand(top2Address,[paramsTop5[0]])
+      // const top3 = await Top5.deploy(paramsTop5[0]);
+      // await top3.waitForDeployment()
+      // const top3Address = await top3.getAddress();
+      // console.log("top3Address: ",top3Address);
+      // await runCommand(top3Address,[paramsTop5[0]])
+      // const top4 = await Top5.deploy(paramsTop5[0]);
+      // await top4.waitForDeployment()
+      // const top4Address = await top4.getAddress();
+      // console.log("top4Address: ",top4Address);
+      // await runCommand(top4Address,[paramsTop5[0]])
+      // const top5 = await Top5.deploy(paramsTop5[0]);
+      // await top5.waitForDeployment()
+      // const top5Address = await top5.getAddress();
+      // console.log("top5Address: ",top5Address);
+      // await runCommand(top5Address,[paramsTop5[0]])
 
-    //   const G100 = await ethers.getContractFactory("G100");
-    //   const g100 = await G100.deploy(paramsTop5[0]);
-    //   await g100.waitForDeployment()
-    //   const g100Address = await g100.getAddress();
-    //   console.log("g100Address: ",g100Address);
-    //   await runCommand(g100Address,[paramsTop5[0]])
+      // const G100 = await ethers.getContractFactory("G100");
+      // const g100 = await G100.deploy(paramsTop5[0]);
+      // await g100.waitForDeployment()
+      // const g100Address = await g100.getAddress();
+      // console.log("g100Address: ",g100Address);
+      // await runCommand(g100Address,[paramsTop5[0]])
 
 
-    //   const G10 = await ethers.getContractFactory("G10");
-    //   const g10 = await G10.deploy(paramsTop5[0]);
-    //   await g10.waitForDeployment()
-    //   const g10Address = await g10.getAddress();
-    //   console.log("g10Address: ",g10Address);
-    //   await runCommand(g10Address,[paramsTop5[0]])
+      // const G10 = await ethers.getContractFactory("G10");
+      // const g10 = await G10.deploy(paramsTop5[0]);
+      // await g10.waitForDeployment()
+      // const g10Address = await g10.getAddress();
+      // console.log("g10Address: ",g10Address);
+      // await runCommand(g10Address,[paramsTop5[0]])
 
       // const userParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xb38D27157c913Ab634bFE35837a9f6A5884e861A","0x7dB6E172d2DaF51f667Ab70a86200FE26541804C","0x6076aD98e52eb58B26324be23BeE8CdD020e5179","0x04EE90acd7185CD53B428C1c16b787053fE7c133","0x68107596dc39535Aad285CEBbCfE768a9B6123D6","0xA59788333fFd93CC34dbFACB7146e90d61A55483","0x1e8e56675001506b0Ff901DF12398E50044589d3"]
 
@@ -92,27 +92,27 @@ async function main() {
 
       // await runCommand(userRefferalAddress,[userParams[0],userParams[1],userParams[2],userParams[3],userParams[4],userParams[5],userParams[6],userParams[7],userParams[8]])
 
-    //   const poolManagerParams = ["0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",userRefferalAddress]
+      // const poolManagerParams = ["0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",userRefferalAddress]
 
-    //   const PoolManager = await ethers.getContractFactory("PoolManager");
-    //   const poolManager = await PoolManager.deploy(poolManagerParams[0],poolManagerParams[1],poolManagerParams[2]);
-    //   await poolManager.waitForDeployment()
-    //   const poolManagerAddress = await poolManager.getAddress();
-    //   console.log("poolManagerAddress "+poolManagerAddress);
+      // const PoolManager = await ethers.getContractFactory("PoolManager");
+      // const poolManager = await PoolManager.deploy(poolManagerParams[0],poolManagerParams[1],poolManagerParams[2]);
+      // await poolManager.waitForDeployment()
+      // const poolManagerAddress = await poolManager.getAddress();
+      // console.log("poolManagerAddress "+poolManagerAddress);
 
-    //   await runCommand(poolManagerAddress,[poolManagerParams[0],poolManagerParams[1],poolManagerParams[2]])
-    //   await(await poolManager.setUniswapOracle("0xF998e67148839D1bCC9aEC3d23Cf1e8C39821a37")).wait()
-    //   await(await poolManager.setLiquidityPoolUniswapId(2404342)).wait()
+      // await runCommand(poolManagerAddress,[poolManagerParams[0],poolManagerParams[1],poolManagerParams[2]])
+      // await(await poolManager.setUniswapOracle("0xF998e67148839D1bCC9aEC3d23Cf1e8C39821a37")).wait()
+      // await(await poolManager.setLiquidityPoolUniswapId(2404342)).wait()
 
-    //   const DolGlobalCollection = await ethers.getContractFactory("DolGlobalCollection");
+      const DolGlobalCollection = await ethers.getContractFactory("DolGlobalCollection");
 
-    //   const collectionParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",poolManagerAddress,userRefferalAddress,"0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C"]
-    //   const collection = await DolGlobalCollection.deploy(collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3]);
-    //   await collection.waitForDeployment()
-    //   const collectionAddress = await collection.getAddress();
-    //   console.log("collectionAddress "+collectionAddress);
+      const collectionParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa","0x8a2395cF9A20065298c98223669326b04D49aa8c","0x350033e8db915fC0e99dff34391aE7ADc082747e","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C"]
+      const collection = await DolGlobalCollection.deploy(collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3],{gasPrice:ethers.parseUnits("300","gwei")});
+      await collection.waitForDeployment()
+      const collectionAddress = await collection.getAddress();
+      console.log("collectionAddress "+collectionAddress);
 
-    //   await runCommand(collectionAddress,[collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3]])
+      await runCommand(collectionAddress,[collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3]])
 
     // await(await g10.setPoolManager(poolManagerAddress)).wait();
     // await(await g10.setUserContract(userRefferalAddress)).wait();
@@ -120,13 +120,13 @@ async function main() {
     // await(await g100.setPoolManager(poolManagerAddress)).wait();
 
 
-    //   await (await userRefferal.setDolGlobalCollection(collectionAddress)).wait()
-    //   await (await userRefferal.setPoolManager(poolManagerAddress)).wait()
+      // await (await userRefferal.setDolGlobalCollection(collectionAddress)).wait()
+      // await (await userRefferal.setPoolManager(poolManagerAddress)).wait()
 
 
   
       // const rechargeParams = ["0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C",
-      //   "0x1AB7A26d66D902d442caC22beEa8BefEec0C3bcd"]
+      //   poolManagerAddress]
       // const RechargePool = await ethers.getContractFactory("RechargePool");
       // const rechargePool = await RechargePool.deploy(
       //   rechargeParams[0],rechargeParams[1]
