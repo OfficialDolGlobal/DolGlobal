@@ -15,8 +15,8 @@ contract G100 is Ownable2Step, ReentrancyGuard {
     IERC20 immutable usdt;
     IPoolManager poolManager;
     uint public balanceFree;
-    uint price;
-    uint actualMaxRoof;
+    uint public price;
+    uint public actualMaxRoof;
     bool public availableToBuy;
 
     mapping(address => uint) public maxRoof;
@@ -83,7 +83,7 @@ contract G100 is Ownable2Step, ReentrancyGuard {
         }
         usdt.safeTransferFrom(msg.sender, address(this), price);
         usdt.approve(address(poolManager), price);
-        poolManager.sendToReservePool(price);
+        poolManager.increaseLiquidityReservePool(price);
     }
     function getAllAddresses() external view returns (address[100] memory) {
         return addresses;
@@ -122,7 +122,7 @@ contract G100 is Ownable2Step, ReentrancyGuard {
         }
         if (excess > 0) {
             usdt.approve(address(poolManager), excess);
-            poolManager.sendToReservePool(excess);
+            poolManager.increaseLiquidityReservePool(excess);
         }
     }
 }

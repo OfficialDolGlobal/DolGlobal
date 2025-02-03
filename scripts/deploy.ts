@@ -80,7 +80,6 @@ async function main() {
     //   const g10Address = await g10.getAddress();
     //   console.log("g10Address: ",g10Address);
     //   await runCommand(g10Address,[paramsTop5[0]])
-    const provider = new ethers.JsonRpcProvider("https://polygon-rpc.com")
 
       // const userParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xb38D27157c913Ab634bFE35837a9f6A5884e861A","0x7dB6E172d2DaF51f667Ab70a86200FE26541804C","0x6076aD98e52eb58B26324be23BeE8CdD020e5179","0x04EE90acd7185CD53B428C1c16b787053fE7c133","0x68107596dc39535Aad285CEBbCfE768a9B6123D6","0xA59788333fFd93CC34dbFACB7146e90d61A55483","0x1e8e56675001506b0Ff901DF12398E50044589d3"]
 

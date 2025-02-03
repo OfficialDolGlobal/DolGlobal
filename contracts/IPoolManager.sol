@@ -31,5 +31,4 @@ interface IPoolManager {
     ) external;
 
     function isFaceIdVerified(address _user) external view returns (bool);
-    function sendToReservePool(uint amount) external;
 }

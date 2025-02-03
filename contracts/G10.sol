@@ -11,7 +11,7 @@ import 'hardhat/console.sol';
 contract G10 is Ownable2Step, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
-    uint128 public constant DAILY_PAYMENT = 500e6;
+    uint128 public dailyPayment = 500e6;
     uint8 public constant MAX_QUANTITY_OF_USERS = 15;
 
     bool private roofReachedDaily;
@@ -74,7 +74,7 @@ contract G10 is Ownable2Step, ReentrancyGuard {
         addresses[index - 1] = newAddress;
     }
 
-    function claim() external {
+    function claim() external nonReentrant {
         if (balanceFree > 0) {
             distribute();
         }
@@ -107,8 +107,12 @@ contract G10 is Ownable2Step, ReentrancyGuard {
         }
         if (excess > 0) {
             usdt.approve(address(poolManager), excess);
-            poolManager.sendToReservePool(excess);
+            poolManager.increaseLiquidityReservePool(excess);
         }
+    }
+
+    function setDailyPayment(uint128 newDailyPayment) external onlyOwner {
+        dailyPayment = newDailyPayment;
     }
     function buyDailyRoof() external nonReentrant {
         require(
@@ -116,9 +120,9 @@ contract G10 is Ownable2Step, ReentrancyGuard {
             'Already Purchased'
         );
         distribute();
-        usdt.safeTransferFrom(msg.sender, address(this), DAILY_PAYMENT);
+        usdt.safeTransferFrom(msg.sender, address(this), dailyPayment);
         bought[msg.sender][getDayStartTimestamp(block.timestamp)] = true;
-        usdt.approve(address(poolManager), DAILY_PAYMENT);
-        poolManager.sendToReservePool(DAILY_PAYMENT);
+        usdt.approve(address(poolManager), dailyPayment);
+        poolManager.increaseLiquidityReservePool(dailyPayment);
     }
 }

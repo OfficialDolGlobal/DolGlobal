@@ -55,7 +55,7 @@ contract Top5 is Ownable2Step, ReentrancyGuard {
         usdt.safeTransferFrom(msg.sender, address(this), price);
 
         usdt.approve(address(poolManager), price);
-        poolManager.sendToReservePool(price);
+        poolManager.increaseLiquidityReservePool(price);
     }
 
     function viewRemainingBalance() external view returns (uint remaining) {
@@ -66,7 +66,7 @@ contract Top5 is Ownable2Step, ReentrancyGuard {
         usdt.safeTransferFrom(msg.sender, address(this), amount);
         if (user.addressTop5 == address(0)) {
             usdt.approve(address(poolManager), amount);
-            poolManager.sendToReservePool(amount);
+            poolManager.increaseLiquidityReservePool(amount);
         } else {
             user.valueReached += amount;
             usdt.safeTransfer(user.addressTop5, amount);

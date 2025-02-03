@@ -19,7 +19,7 @@ abstract contract PaymentPool is Ownable2Step, ReentrancyGuard {
     mapping(address => mapping(address => uint)) public recipientsClaim;
     mapping(address => uint24) public recipientsPercentage;
     mapping(address => bool) public immutableWallets;
-    address[] private recipients;
+    address[] public recipients;
     uint8 public totalRecipients;
     uint24 public totalPercentage;
     uint24 public constant PRECISION = 1e6;
@@ -118,10 +118,15 @@ abstract contract PaymentPool is Ownable2Step, ReentrancyGuard {
         TokenBalance[] memory balances = new TokenBalance[](tokens.length);
 
         for (uint i = 0; i < tokens.length; i++) {
+            address token = address(tokens[i]);
+            uint256 totalClaimable = recipientsClaim[_wallet][token];
+            uint256 freeShare = (balanceFree[token] *
+                recipientsPercentage[_wallet]) / PRECISION;
+
             balances[i] = TokenBalance({
-                token: address(tokens[i]),
-                name: tokenNames[address(tokens[i])],
-                balance: recipientsClaim[_wallet][address(tokens[i])]
+                token: token,
+                name: tokenNames[token],
+                balance: totalClaimable + freeShare
             });
         }
 

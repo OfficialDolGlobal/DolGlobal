@@ -32,7 +32,7 @@ contract PoolManager is Ownable2Step {
     IManager public marketingPool;
     address public rechargePool;
     address public reservePool = 0x67BAE7b8022c2ac776f47e65f99CD28311519B1D;
-    address public reservePool2 = 0xF4F036285b30A1ac4352b58591746d46cfc6fDdD;
+    address public reservePool2 = 0x6e595E0d3Fa79a4a056e5875f8752225b57A0c9a;
 
     ISwapRouter public immutable swapRouter;
     IUniswapOracle public oracle;
@@ -63,7 +63,7 @@ contract PoolManager is Ownable2Step {
 
         usdt = IERC20(_usdt);
     }
-    function sendToReservePool(uint amount) external {
+    function increaseLiquidityReservePool(uint amount) external {
         usdt.safeTransferFrom(msg.sender, address(this), amount);
         usdt.safeTransfer(reservePool, (amount * 8) / 10);
         usdt.safeTransfer(reservePool2, (amount * 2) / 10);
@@ -117,12 +117,6 @@ contract PoolManager is Ownable2Step {
     function isFaceIdVerified(address _user) external view returns (bool) {
         UserStruct memory user = userDolGlobal.getUser(_user);
         return user.faceId && user.registered;
-    }
-    function fillTreasuryPoolWithRechargePool(uint amount) external onlyOwner {
-        dolToken.safeTransferFrom(rechargePool, address(this), amount);
-        dolToken.approve(address(treasuryPool), amount);
-
-        treasuryPool.addDistributionFunds(amount);
     }
 
     function setLockPoolUniswapId(uint lockId) external onlyOwner {

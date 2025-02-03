@@ -141,8 +141,6 @@ import { token } from "../typechain-types/@openzeppelin/contracts";
       await treasuryPool.contribute(1000*10**6)
 
       
-      // expect(await rechargePool.getTotalTokens()).to.be.equal(100000000000000000000n)
-      // await poolManager.fillTreasuryPoolWithRechargePool(100000000000000000000n)
       expect(await rechargePool.getTotalTokens()).to.be.equal(0)
       await expect(treasuryPool.contribute(5*10**6)).to.be.revertedWith("Amount must be greater than 10 dollars")
 

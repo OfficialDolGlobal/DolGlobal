@@ -112,7 +112,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
 
         usdt.approve(address(poolManager), amount);
         poolManager.increaseLiquidityDevPool(amount / 10, address(usdt));
-        poolManager.sendToReservePool(amount / 5);
+        poolManager.increaseLiquidityReservePool(amount / 5);
 
         uint amountToken = poolManager.swap(
             address(usdt),
