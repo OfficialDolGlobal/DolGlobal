@@ -13,7 +13,6 @@ import './ITreasuryPool.sol';
 import './IUserDolGlobal.sol';
 import './IManager.sol';
 import './IUniswapOracle.sol';
-import 'hardhat/console.sol';
 enum PoolType {
     TREASURY,
     RECHARGE,
@@ -32,7 +31,7 @@ contract PoolManager is Ownable2Step {
     IManager public marketingPool;
     address public rechargePool;
     address public constant reservePool =
-        0x67BAE7b8022c2ac776f47e65f99CD28311519B1D;
+        0x1dbd97b0d2bc78d9B4dE3188180FAA44D9217f1D;
     address public constant reservePool2 =
         0x6e595E0d3Fa79a4a056e5875f8752225b57A0c9a;
 

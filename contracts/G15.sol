@@ -6,9 +6,8 @@ import '@openzeppelin/contracts/access/Ownable2Step.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/utils/ReentrancyGuard.sol';
 import './IPoolManager.sol';
-import 'hardhat/console.sol';
 
-contract G10 is Ownable2Step, ReentrancyGuard {
+contract G15 is Ownable2Step, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     uint128 public dailyPayment = 500e6;

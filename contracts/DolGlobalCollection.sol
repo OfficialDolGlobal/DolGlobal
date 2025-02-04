@@ -7,7 +7,6 @@ import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol';
 import '@openzeppelin/contracts/utils/ReentrancyGuard.sol';
 import './IPoolManager.sol';
-import 'hardhat/console.sol';
 struct NftGlobalStruct {
     uint maxUnilevel;
     uint unilevelReached;

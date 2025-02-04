@@ -6,7 +6,6 @@ import '@openzeppelin/contracts/access/Ownable2Step.sol';
 import '@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol';
 import '@openzeppelin/contracts/utils/ReentrancyGuard.sol';
 import './IPoolManager.sol';
-import 'hardhat/console.sol';
 
 contract G100 is Ownable2Step, ReentrancyGuard {
     using SafeERC20 for IERC20;

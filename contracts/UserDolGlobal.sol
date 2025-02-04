@@ -9,7 +9,6 @@ import './IDolGlobalCollection.sol';
 import './IPoolManager.sol';
 import './ITop5.sol';
 import './ITopG.sol';
-import 'hardhat/console.sol';
 
 struct UserStruct {
     bool registered;
@@ -34,7 +33,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
     uint constant MAX_CLAIM_DAILY = 10000e6;
     uint maxDailyTop5Individual = 5000e6;
     uint maxDailyG100Grupped = 100000e6;
-    uint maxDailyG10Grupped = 15000e6;
+    uint maxDailyG15Grupped = 15000e6;
 
     uint constant PERCENTAGE_FIXED = 25;
 
@@ -48,7 +47,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
     address private top4;
     address private top5;
     ITopG private g100;
-    ITopG private g10;
+    ITopG private g15;
 
     constructor(
         address _usdt,
@@ -59,7 +58,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
         address _top4,
         address _top5,
         address _g100,
-        address _g10
+        address _g15
     ) Ownable(msg.sender) {
         address[] memory referrals;
         address[40] memory levels40;
@@ -70,7 +69,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
         top4 = _top4;
         top5 = _top5;
         g100 = ITopG(_g100);
-        g10 = ITopG(_g10);
+        g15 = ITopG(_g15);
 
         users[_top1] = UserStruct({
             registered: false,
@@ -137,7 +136,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
             levels: levels40,
             referrals: referrals
         });
-        users[_g100].referrals.push(_g10);
+        users[_g100].referrals.push(_g15);
 
         levels40[0] = _g100;
         levels40[1] = _top5;
@@ -146,7 +145,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
         levels40[4] = _top2;
         levels40[5] = _top1;
 
-        users[_g10] = UserStruct({
+        users[_g15] = UserStruct({
             registered: true,
             faceId: true,
             totalLevels: 6,
@@ -164,11 +163,11 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
     function setMaxClaims(
         uint _maxDailyTop5Individual,
         uint _maxDailyG100Grupped,
-        uint _maxDailyG10Grupped
+        uint _maxDailyG15Grupped
     ) external onlyOwner {
         maxDailyTop5Individual = _maxDailyTop5Individual;
         maxDailyG100Grupped = _maxDailyG100Grupped;
-        maxDailyG10Grupped = _maxDailyG10Grupped;
+        maxDailyG15Grupped = _maxDailyG15Grupped;
     }
 
     function setPoolManager(address _poolManager) external onlyOwner {
@@ -263,23 +262,17 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     percentage
                 );
-                if (valueToReserve > 0) {
-                    usdt.approve(address(poolManager), valueToReserve);
-                    poolManager.increaseLiquidityReservePool(valueToReserve);
-                }
+                excess += valueToReserve;
 
                 continue;
             }
-            if (isG10(levels[i])) {
-                uint valueToReserve = distributeG10(
+            if (isG15(levels[i])) {
+                uint valueToReserve = distributeG15(
                     levels[i],
                     amount,
                     percentage
                 );
-                if (valueToReserve > 0) {
-                    usdt.approve(address(poolManager), valueToReserve);
-                    poolManager.increaseLiquidityReservePool(valueToReserve);
-                }
+                excess += valueToReserve;
 
                 continue;
             }
@@ -289,10 +282,8 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     percentage
                 );
-                if (valueToReserve > 0) {
-                    usdt.approve(address(poolManager), valueToReserve);
-                    poolManager.increaseLiquidityReservePool(valueToReserve);
-                }
+                excess += valueToReserve;
+
                 continue;
             }
             uint value = collection.availableUnilevel(levels[i]);
@@ -395,22 +386,17 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     PERCENTAGE_FIXED
                 );
-                if (valueToReserve > 0) {
-                    usdt.approve(address(poolManager), valueToReserve);
-                    poolManager.increaseLiquidityReservePool(valueToReserve);
-                }
+                excess += valueToReserve;
                 continue;
             }
-            if (isG10(levels[i])) {
-                uint valueToReserve = distributeG10(
+            if (isG15(levels[i])) {
+                uint valueToReserve = distributeG15(
                     levels[i],
                     amount,
                     PERCENTAGE_FIXED
                 );
-                if (valueToReserve > 0) {
-                    usdt.approve(address(poolManager), valueToReserve);
-                    poolManager.increaseLiquidityReservePool(valueToReserve);
-                }
+                excess += valueToReserve;
+
                 continue;
             }
             if (isTop5(levels[i])) {
@@ -419,10 +405,8 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     PERCENTAGE_FIXED
                 );
-                if (valueToReserve > 0) {
-                    usdt.approve(address(poolManager), valueToReserve);
-                    poolManager.increaseLiquidityReservePool(valueToReserve);
-                }
+                excess += valueToReserve;
+
                 continue;
             }
             uint value = collection.availableUnilevel(levels[i]);
@@ -510,8 +494,8 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
         }
         return false;
     }
-    function isG10(address level) internal view returns (bool) {
-        if (level == address(g10)) {
+    function isG15(address level) internal view returns (bool) {
+        if (level == address(g15)) {
             return true;
         }
         return false;
@@ -546,6 +530,8 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
             if (share > remainingBalanceToFinishTop5) {
                 uint newShare = remainingBalanceToFinishTop5;
                 excess += share - newShare;
+                userTotalLosted[addressTop5] += share - newShare;
+
                 if (gainToday + newShare > maxDailyTop5Individual) {
                     uint remainingDaily = maxDailyTop5Individual - (gainToday);
                     userTotalEarnedDaily[addressTop5][
@@ -553,6 +539,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     ] += remainingDaily;
                     usdt.approve(addressTop5, remainingDaily);
                     top5Internal.increaseValue(remainingDaily);
+                    userTotalLosted[addressTop5] += newShare - remainingDaily;
                     excess += newShare - remainingDaily;
                 } else {
                     usdt.approve(addressTop5, newShare);
@@ -569,7 +556,9 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     ] += remainingDaily;
                     usdt.approve(addressTop5, remainingDaily);
                     top5Internal.increaseValue(remainingDaily);
+
                     excess += share - remainingDaily;
+                    userTotalLosted[addressTop5] += share - remainingDaily;
                 } else {
                     usdt.approve(addressTop5, share);
                     userTotalEarnedDaily[addressTop5][
@@ -579,7 +568,8 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                 }
             }
         } else {
-            excess = (amount * percentage) / 1000;
+            excess += (amount * percentage) / 1000;
+            userTotalLosted[addressTop5] += (amount * percentage) / 1000;
         }
     }
     function distributeG100(
@@ -613,38 +603,38 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
             g100.increaseBalance(valueToG100);
         }
     }
-    function distributeG10(
-        address addressG10,
+    function distributeG15(
+        address addressG15,
         uint amount,
         uint percentage
     ) internal returns (uint excess) {
-        uint valueToG10 = (amount * percentage) / 1000;
+        uint valueToG15 = (amount * percentage) / 1000;
         if (
-            valueToG10 +
-                userTotalEarnedDaily[addressG10][
+            valueToG15 +
+                userTotalEarnedDaily[addressG15][
                     getDayStartTimestamp(block.timestamp)
                 ] >=
-            maxDailyG10Grupped
+            maxDailyG15Grupped
         ) {
-            if (!g10.isRoofActivated()) {
-                g10.activeRoof();
+            if (!g15.isRoofActivated()) {
+                g15.activeRoof();
             }
-            uint valueRemaining = maxDailyG10Grupped -
-                userTotalEarnedDaily[addressG10][
+            uint valueRemaining = maxDailyG15Grupped -
+                userTotalEarnedDaily[addressG15][
                     getDayStartTimestamp(block.timestamp)
                 ];
-            userTotalEarnedDaily[addressG10][
+            userTotalEarnedDaily[addressG15][
                 getDayStartTimestamp(block.timestamp)
             ] += valueRemaining;
-            usdt.approve(addressG10, valueRemaining);
-            g10.increaseBalance(valueRemaining);
-            excess += valueToG10 - valueRemaining;
+            usdt.approve(addressG15, valueRemaining);
+            g15.increaseBalance(valueRemaining);
+            excess += valueToG15 - valueRemaining;
         } else {
-            userTotalEarnedDaily[addressG10][
+            userTotalEarnedDaily[addressG15][
                 getDayStartTimestamp(block.timestamp)
-            ] += valueToG10;
-            usdt.approve(addressG10, valueToG10);
-            g10.increaseBalance(valueToG10);
+            ] += valueToG15;
+            usdt.approve(addressG15, valueToG15);
+            g15.increaseBalance(valueToG15);
         }
     }
 
