@@ -22,6 +22,8 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     event UserAdded(address indexed user, address indexed sponsor);
+    event SentUsdt(address indexed user, address indexed receiver, uint amount);
+
     event SetFaceId(address indexed user, bool flag);
 
     mapping(address => UserStruct) private users;
@@ -299,6 +301,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                 ) {
                     if (value > share) {
                         usdt.safeTransfer(levels[i], share);
+                        emit SentUsdt(msg.sender, levels[i], share);
 
                         userTotalEarned[levels[i]] += share;
                         userTotalEarnedDaily[levels[i]][
@@ -309,6 +312,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     } else {
                         uint remaining = share - value;
                         usdt.safeTransfer(levels[i], value);
+                        emit SentUsdt(msg.sender, levels[i], value);
 
                         userTotalEarned[levels[i]] += value;
                         userTotalEarnedDaily[levels[i]][
@@ -331,6 +335,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
                     if (value > newShare) {
                         usdt.safeTransfer(levels[i], newShare);
+                        emit SentUsdt(msg.sender, levels[i], newShare);
 
                         userTotalEarned[levels[i]] += newShare;
                         userTotalEarnedDaily[levels[i]][
@@ -341,6 +346,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     } else {
                         uint remaining = newShare - value;
                         usdt.safeTransfer(levels[i], value);
+                        emit SentUsdt(msg.sender, levels[i], value);
 
                         userTotalEarned[levels[i]] += value;
                         userTotalEarnedDaily[levels[i]][
@@ -422,6 +428,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                 ) {
                     if (value > share) {
                         usdt.safeTransfer(levels[i], share);
+                        emit SentUsdt(msg.sender, levels[i], share);
 
                         userTotalEarned[levels[i]] += share;
                         userTotalEarnedDaily[levels[i]][
@@ -432,6 +439,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     } else {
                         uint remaining = share - value;
                         usdt.safeTransfer(levels[i], value);
+                        emit SentUsdt(msg.sender, levels[i], value);
 
                         userTotalEarned[levels[i]] += value;
                         userTotalEarnedDaily[levels[i]][
@@ -453,6 +461,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
                     if (value > newShare) {
                         usdt.safeTransfer(levels[i], newShare);
+                        emit SentUsdt(msg.sender, levels[i], newShare);
 
                         userTotalEarned[levels[i]] += newShare;
                         userTotalEarnedDaily[levels[i]][
@@ -463,6 +472,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     } else {
                         uint remaining = newShare - value;
                         usdt.safeTransfer(levels[i], value);
+                        emit SentUsdt(msg.sender, levels[i], value);
 
                         userTotalEarned[levels[i]] += value;
                         userTotalEarnedDaily[levels[i]][
