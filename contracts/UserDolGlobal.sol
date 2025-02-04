@@ -43,6 +43,8 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
     IERC20 private immutable dolGlobal;
     IDolGlobalCollection private collection;
     IPoolManager private poolManager;
+    address private bot;
+
     address private top1;
     address private top2;
     address private top3;
@@ -158,10 +160,17 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
         usdt = IERC20(_usdt);
         dolGlobal = IERC20(_dolGlobal);
     }
+    modifier onlyBot() {
+        require(msg.sender == bot, 'Only bot can call this function');
+        _;
+    }
     function changeBlackList(address user, bool flag) external onlyOwner {
         blacklisted[user] = flag;
     }
 
+    function setBotWallet(address newAddress) external onlyOwner {
+        bot = newAddress;
+    }
     function setMaxClaims(
         uint _maxDailyTop5Individual,
         uint _maxDailyG100Grupped,
@@ -178,11 +187,11 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
     function setDolGlobalCollection(address _collection) external onlyOwner {
         collection = IDolGlobalCollection(_collection);
     }
-    function setFaceId(address user, bool flag) external onlyOwner {
+    function setFaceId(address user, bool flag) external onlyBot {
         users[user].faceId = flag;
         emit SetFaceId(user, flag);
     }
-    function createUser(address user, address _sponsor) public onlyOwner {
+    function createUser(address user, address _sponsor) public onlyBot {
         require(_sponsor != address(0), 'Zero address');
         require(user != address(0), 'Zero address');
 
