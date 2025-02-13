@@ -81,38 +81,60 @@ async function main() {
       // console.log("g10Address: ",g10Address);
       // await runCommand(g10Address,[paramsTop5[0]])
 
-      // const userParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xb38D27157c913Ab634bFE35837a9f6A5884e861A","0x7dB6E172d2DaF51f667Ab70a86200FE26541804C","0x6076aD98e52eb58B26324be23BeE8CdD020e5179","0x04EE90acd7185CD53B428C1c16b787053fE7c133","0x68107596dc39535Aad285CEBbCfE768a9B6123D6","0xA59788333fFd93CC34dbFACB7146e90d61A55483","0x1e8e56675001506b0Ff901DF12398E50044589d3"]
+      const userParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xb38D27157c913Ab634bFE35837a9f6A5884e861A","0x7dB6E172d2DaF51f667Ab70a86200FE26541804C","0x6076aD98e52eb58B26324be23BeE8CdD020e5179","0x04EE90acd7185CD53B428C1c16b787053fE7c133","0x68107596dc39535Aad285CEBbCfE768a9B6123D6","0xA59788333fFd93CC34dbFACB7146e90d61A55483","0x1e8e56675001506b0Ff901DF12398E50044589d3"]
 
 
-      // const UserRefferal = await ethers.getContractFactory("UserDolGlobal");
-      // const userRefferal = await UserRefferal.deploy(userParams[0],userParams[1],userParams[2],userParams[3],userParams[4],userParams[5],userParams[6],userParams[7],userParams[8]);
-      // await userRefferal.waitForDeployment()
-      // const userRefferalAddress = await userRefferal.getAddress();
-      // console.log("userRefferalAddress "+userRefferalAddress);
+      const UserRefferal = await ethers.getContractFactory("UserDolGlobal");
+      const userRefferal = await UserRefferal.deploy(userParams[0],userParams[1],userParams[2],userParams[3],userParams[4],userParams[5],userParams[6],userParams[7],userParams[8],{gasPrice:ethers.parseUnits("300","gwei")});
+      await userRefferal.waitForDeployment()
+      const userRefferalAddress = await userRefferal.getAddress();
+      console.log("userRefferalAddress "+userRefferalAddress);
 
       // await runCommand(userRefferalAddress,[userParams[0],userParams[1],userParams[2],userParams[3],userParams[4],userParams[5],userParams[6],userParams[7],userParams[8]])
+
+      // const userParamsMulticall = ["0xD4B1692536C21852a05Ac4Df72E725D28827e871"]
+
+
+      // const UserRefferalMulticall = await ethers.getContractFactory("MultiCallUser");
+      // const userRefferalMulticall = await UserRefferalMulticall.deploy(userParamsMulticall[0]);
+      // await userRefferalMulticall.waitForDeployment()
+      // const userRefferalAddressMulticall = await userRefferalMulticall.getAddress();
+      // console.log("userRefferalAddressMulticall "+userRefferalAddressMulticall);
+
+      // await runCommand(userRefferalAddressMulticall,[userParamsMulticall[0]])
+
+      const PaymentTrackerParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa"]
+
+
+      const PaymentTracker = await ethers.getContractFactory("PaymentTracker");
+      const paymentTracker = await PaymentTracker.deploy(PaymentTrackerParams[0]);
+      await paymentTracker.waitForDeployment()
+      const paymentTrackerAddress = await paymentTracker.getAddress();
+      console.log("paymentTrackerAddress "+paymentTrackerAddress);
+
+      await runCommand(paymentTrackerAddress,[PaymentTrackerParams[0]])
 
       // const poolManagerParams = ["0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",userRefferalAddress]
 
       // const PoolManager = await ethers.getContractFactory("PoolManager");
-      // const poolManager = await PoolManager.deploy(poolManagerParams[0],poolManagerParams[1],poolManagerParams[2]);
+      // const poolManager = await PoolManager.deploy(poolManagerParams[0],poolManagerParams[1],poolManagerParams[2],{gasPrice:ethers.parseUnits("300","gwei")});
       // await poolManager.waitForDeployment()
       // const poolManagerAddress = await poolManager.getAddress();
       // console.log("poolManagerAddress "+poolManagerAddress);
 
       // await runCommand(poolManagerAddress,[poolManagerParams[0],poolManagerParams[1],poolManagerParams[2]])
-      // await(await poolManager.setUniswapOracle("0xF998e67148839D1bCC9aEC3d23Cf1e8C39821a37")).wait()
-      // await(await poolManager.setLiquidityPoolUniswapId(2404342)).wait()
+      // await(await poolManager.setUniswapOracle("0xF998e67148839D1bCC9aEC3d23Cf1e8C39821a37",{gasPrice:ethers.parseUnits("300","gwei")})).wait()
+      // await(await poolManager.setLiquidityPoolUniswapId(2404342,{gasPrice:ethers.parseUnits("300","gwei")})).wait()
 
-      const DolGlobalCollection = await ethers.getContractFactory("DolGlobalCollection");
+      // const DolGlobalCollection = await ethers.getContractFactory("DolGlobalCollection");
 
-      const collectionParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa","0x8a2395cF9A20065298c98223669326b04D49aa8c","0x350033e8db915fC0e99dff34391aE7ADc082747e","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C"]
-      const collection = await DolGlobalCollection.deploy(collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3],{gasPrice:ethers.parseUnits("300","gwei")});
-      await collection.waitForDeployment()
-      const collectionAddress = await collection.getAddress();
-      console.log("collectionAddress "+collectionAddress);
+      // const collectionParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",poolManagerAddress,userRefferalAddress,"0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C"]
+      // const collection = await DolGlobalCollection.deploy(collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3],{gasPrice:ethers.parseUnits("300","gwei")});
+      // await collection.waitForDeployment()
+      // const collectionAddress = await collection.getAddress();
+      // console.log("collectionAddress "+collectionAddress);
 
-      await runCommand(collectionAddress,[collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3]])
+      // await runCommand(collectionAddress,[collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3]])
 
     // await(await g10.setPoolManager(poolManagerAddress)).wait();
     // await(await g10.setUserContract(userRefferalAddress)).wait();
@@ -120,8 +142,8 @@ async function main() {
     // await(await g100.setPoolManager(poolManagerAddress)).wait();
 
 
-      // await (await userRefferal.setDolGlobalCollection(collectionAddress)).wait()
-      // await (await userRefferal.setPoolManager(poolManagerAddress)).wait()
+      // await (await userRefferal.setDolGlobalCollection(collectionAddress,{gasPrice:ethers.parseUnits("300","gwei")})).wait()
+      // await (await userRefferal.setPoolManager(poolManagerAddress,{gasPrice:ethers.parseUnits("300","gwei")})).wait()
 
 
   
@@ -173,7 +195,7 @@ async function main() {
       // const treasuryPool = await TreasuryPool.deploy(
       //   treasuryParams[0],
       //   treasuryParams[1],
-      //   treasuryParams[2]
+      //   treasuryParams[2],{gasPrice:ethers.parseUnits("300","gwei")}
       // );
       // await treasuryPool.waitForDeployment()
       // const treasuryPoolAddress = await treasuryPool.getAddress();
@@ -184,11 +206,11 @@ async function main() {
       //   treasuryParams[2]])
 
 
-      // await (await poolManager.setPools(PoolType.TREASURY,treasuryPoolAddress)).wait()
+      // await (await poolManager.setPools(PoolType.TREASURY,treasuryPoolAddress,{gasPrice:ethers.parseUnits("300","gwei")})).wait()
       
-      // await (await poolManager.setPools(PoolType.RECHARGE,"0xa8Cda26d10611B7f9C6Ae808bD0FDcd513564140")).wait()
-      // await (await poolManager.setPools(PoolType.DEVS,"0xfA66c51E617D3b04400418D8bcAb9b0493026311")).wait()
-      // await (await poolManager.setPools(PoolType.MARKETING,"0x3f29872d5bBE60834A8B163B40332d965ad14f3F")).wait()
+      // await (await poolManager.setPools(PoolType.RECHARGE,"0xa8Cda26d10611B7f9C6Ae808bD0FDcd513564140",{gasPrice:ethers.parseUnits("300","gwei")})).wait()
+      // await (await poolManager.setPools(PoolType.DEVS,"0xfA66c51E617D3b04400418D8bcAb9b0493026311",{gasPrice:ethers.parseUnits("300","gwei")})).wait()
+      // await (await poolManager.setPools(PoolType.MARKETING,"0x3f29872d5bBE60834A8B163B40332d965ad14f3F",{gasPrice:ethers.parseUnits("300","gwei")})).wait()
 
 
       

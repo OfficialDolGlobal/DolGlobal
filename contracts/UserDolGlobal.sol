@@ -64,6 +64,15 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
         address _g100,
         address _g15
     ) Ownable(msg.sender) {
+        require(_usdt != address(0), 'Cannot be zero');
+        require(_dolGlobal != address(0), 'Cannot be zero');
+        require(_top1 != address(0), 'Cannot be zero');
+        require(_top2 != address(0), 'Cannot be zero');
+        require(_top3 != address(0), 'Cannot be zero');
+        require(_top4 != address(0), 'Cannot be zero');
+        require(_top5 != address(0), 'Cannot be zero');
+        require(_g100 != address(0), 'Cannot be zero');
+        require(_g15 != address(0), 'Cannot be zero');
         address[] memory referrals;
         address[40] memory levels40;
 
@@ -169,6 +178,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
     }
 
     function setBotWallet(address newAddress) external onlyOwner {
+        require(newAddress != address(0), 'Cannot be zero');
         bot = newAddress;
     }
     function setMaxClaims(
@@ -273,6 +283,9 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     percentage
                 );
+                userTotalEarned[levels[i]] += amount - valueToReserve;
+                userTotalLosted[levels[i]] += valueToReserve;
+
                 excess += valueToReserve;
 
                 continue;
@@ -283,6 +296,8 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     percentage
                 );
+                userTotalEarned[levels[i]] += amount - valueToReserve;
+                userTotalLosted[levels[i]] += valueToReserve;
                 excess += valueToReserve;
 
                 continue;
@@ -293,8 +308,8 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     percentage
                 );
+                userTotalEarned[levels[i]] += amount - valueToReserve;
                 excess += valueToReserve;
-
                 continue;
             }
             uint value = collection.availableUnilevel(levels[i]);

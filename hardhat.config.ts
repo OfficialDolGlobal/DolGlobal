@@ -1,9 +1,10 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import dotenv from "dotenv";
+dotenv.config();
+
 import "@nomicfoundation/hardhat-ethers";
 
-dotenv.config();
 
 const config: HardhatUserConfig = {
   solidity: {

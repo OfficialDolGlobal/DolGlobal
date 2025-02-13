@@ -29,7 +29,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
     event UserClaimed(address indexed user, uint amount);
     event Burn(uint indexed amount);
 
-    uint24 private constant CLAIM_PERIOD = 1 days;
+    uint24 private constant CLAIM_PERIOD = 10 seconds;
     uint8 private constant MAX_PERIOD = 150;
 
     IBurnable private immutable token;
@@ -63,7 +63,11 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         address user,
         uint index
     ) public view returns (uint256) {
-        Donation.UserDonation storage userDonation = users[user][index];
+        require(
+            index > 0 && index <= userTotalContributions[user],
+            'Invalid Index'
+        );
+        Donation.UserDonation memory userDonation = users[user][index];
         if (userDonation.daysPaid == MAX_PERIOD) {
             return 0;
         }
@@ -225,6 +229,10 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         address user,
         uint index
     ) public view returns (uint) {
+        require(
+            index > 0 && index <= userTotalContributions[user],
+            'Invalid Index'
+        );
         uint daysElapsed = (block.timestamp -
             users[user][index].lastClaimTimestamp) / CLAIM_PERIOD;
         if (daysElapsed + users[user][index].daysPaid > MAX_PERIOD) {
@@ -238,6 +246,10 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         address user,
         uint startIndex
     ) external view returns (Donation.UserDonation memory contribution) {
+        require(
+            startIndex > 0 && startIndex <= userTotalContributions[user],
+            'Invalid Index'
+        );
         if (userTotalContributions[user] == 0) {
             Donation.UserDonation memory auxContribution;
             return auxContribution;
@@ -268,10 +280,14 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         address user,
         uint index
     ) external view returns (uint valueUsdt, uint valueDol) {
+        require(
+            index > 0 && index <= userTotalContributions[user],
+            'Invalid Index'
+        );
         if (userTotalContributions[user] == 0) {
             return (0, 0);
         }
-        Donation.UserDonation storage userDonation = users[user][index];
+        Donation.UserDonation memory userDonation = users[user][index];
         if (userDonation.daysPaid == MAX_PERIOD) {
             return (0, 0);
         }
@@ -297,6 +313,10 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         address user,
         uint startIndex
     ) external view returns (uint dailyGainUs, uint dailyGainDol) {
+        require(
+            startIndex > 0 && startIndex <= userTotalContributions[user],
+            'Invalid Index'
+        );
         uint count = 0;
         uint totalContributions = userTotalContributions[user];
         uint maxActiveContributions = 50;
@@ -307,7 +327,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         ) {
             uint daysElapsed = calculateDaysElapsedToClaim(user, i);
 
-            if (users[user][i].daysPaid + daysElapsed < MAX_PERIOD) {
+            if (users[user][i].daysPaid + daysElapsed <= MAX_PERIOD) {
                 dailyGainUs += users[user][i].balance / MAX_PERIOD;
             }
             ++count;
@@ -322,6 +342,10 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         uint index,
         uint daysElapsed
     ) internal view returns (uint) {
+        require(
+            index > 0 && index <= userTotalContributions[user],
+            'Invalid Index'
+        );
         return (users[user][index].balance * daysElapsed) / MAX_PERIOD;
     }
 
@@ -369,9 +393,10 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         users[msg.sender][index].claims.push((totalTokensToSend));
         users[msg.sender][index].claimPrice.push((currentPrice));
         users[msg.sender][index].claimsTimestamp.push(block.timestamp);
-        usdt.approve(address(poolManager), (amountOut) / 100);
-        poolManager.increaseLiquidityDevPool(amountOut / 100, address(usdt));
-        usdt.safeTransfer(msg.sender, (amountOut * 99) / 100);
+        uint fee = amountOut / 100;
+        usdt.approve(address(poolManager), fee);
+        poolManager.increaseLiquidityDevPool(fee, address(usdt));
+        usdt.safeTransfer(msg.sender, (amountOut - fee));
 
         emit UserClaimed(msg.sender, totalValueInUSD);
     }
@@ -380,6 +405,10 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         address _user,
         uint index
     ) public view returns (Donation.UserDonation memory) {
+        require(
+            index > 0 && index <= userTotalContributions[_user],
+            'Invalid Index'
+        );
         Donation.UserDonation memory userDonation = users[_user][index];
         return userDonation;
     }

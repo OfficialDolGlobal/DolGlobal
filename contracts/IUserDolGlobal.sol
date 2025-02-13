@@ -13,4 +13,6 @@ interface IUserDolGlobal {
     function getUser(
         address _address
     ) external view returns (UserStruct memory);
+    function createUser(address user, address _sponsor) external;
+    function setFaceId(address user, bool flag) external;
 }
