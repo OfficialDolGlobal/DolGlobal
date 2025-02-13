@@ -343,7 +343,9 @@ contract TreasuryPoolMocked is ReentrancyGuard, Ownable2Step {
         require(daysElapsed > 0, 'Tokens are still locked');
 
         users[msg.sender][index].daysPaid += daysElapsed;
-        users[msg.sender][index].lastClaimTimestamp = block.timestamp;
+        users[msg.sender][index].lastClaimTimestamp =
+            users[msg.sender][index].startedTimestamp +
+            (users[msg.sender][index].daysPaid * CLAIM_PERIOD);
         uint totalValueInUSD = calculateValue(msg.sender, index, daysElapsed);
         require(
             totalValueInUSD >= 10e6 ||

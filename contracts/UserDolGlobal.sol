@@ -12,7 +12,6 @@ import './ITopG.sol';
 
 struct UserStruct {
     bool registered;
-    bool faceId;
     uint8 totalLevels;
     address[40] levels;
     address[] referrals;
@@ -22,9 +21,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     event UserAdded(address indexed user, address indexed sponsor);
-    event SentUsdt(address indexed user, address indexed receiver, uint amount);
-
-    event SetFaceId(address indexed user, bool flag);
 
     mapping(address => UserStruct) private users;
     mapping(address => uint) public userTotalEarned;
@@ -86,7 +82,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
         users[_top1] = UserStruct({
             registered: false,
-            faceId: false,
             totalLevels: 0,
             levels: levels40,
             referrals: referrals
@@ -94,7 +89,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
         levels40[0] = _top1;
         users[_top2] = UserStruct({
             registered: false,
-            faceId: false,
             totalLevels: 1,
             levels: levels40,
             referrals: referrals
@@ -104,7 +98,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
         users[_top1].referrals.push(_top2);
         users[_top3] = UserStruct({
             registered: false,
-            faceId: false,
             totalLevels: 2,
             levels: levels40,
             referrals: referrals
@@ -116,7 +109,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
         users[_top4] = UserStruct({
             registered: false,
-            faceId: false,
             totalLevels: 3,
             levels: levels40,
             referrals: referrals
@@ -129,7 +121,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
         users[_top5] = UserStruct({
             registered: false,
-            faceId: false,
             totalLevels: 4,
             levels: levels40,
             referrals: referrals
@@ -144,7 +135,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
         users[_g100] = UserStruct({
             registered: false,
-            faceId: false,
             totalLevels: 5,
             levels: levels40,
             referrals: referrals
@@ -160,7 +150,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
         users[_g15] = UserStruct({
             registered: true,
-            faceId: true,
             totalLevels: 6,
             levels: levels40,
             referrals: referrals
@@ -197,10 +186,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
     function setDolGlobalCollection(address _collection) external onlyOwner {
         collection = IDolGlobalCollection(_collection);
     }
-    function setFaceId(address user, bool flag) external onlyBot {
-        users[user].faceId = flag;
-        emit SetFaceId(user, flag);
-    }
+
     function createUser(address user, address _sponsor) public onlyBot {
         require(_sponsor != address(0), 'Zero address');
         require(user != address(0), 'Zero address');
@@ -325,7 +311,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                 ) {
                     if (value > share) {
                         usdt.safeTransfer(levels[i], share);
-                        emit SentUsdt(msg.sender, levels[i], share);
 
                         userTotalEarned[levels[i]] += share;
                         userTotalEarnedDaily[levels[i]][
@@ -336,7 +321,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     } else {
                         uint remaining = share - value;
                         usdt.safeTransfer(levels[i], value);
-                        emit SentUsdt(msg.sender, levels[i], value);
 
                         userTotalEarned[levels[i]] += value;
                         userTotalEarnedDaily[levels[i]][
@@ -359,7 +343,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
                     if (value > newShare) {
                         usdt.safeTransfer(levels[i], newShare);
-                        emit SentUsdt(msg.sender, levels[i], newShare);
 
                         userTotalEarned[levels[i]] += newShare;
                         userTotalEarnedDaily[levels[i]][
@@ -370,7 +353,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     } else {
                         uint remaining = newShare - value;
                         usdt.safeTransfer(levels[i], value);
-                        emit SentUsdt(msg.sender, levels[i], value);
 
                         userTotalEarned[levels[i]] += value;
                         userTotalEarnedDaily[levels[i]][
@@ -452,7 +434,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                 ) {
                     if (value > share) {
                         usdt.safeTransfer(levels[i], share);
-                        emit SentUsdt(msg.sender, levels[i], share);
 
                         userTotalEarned[levels[i]] += share;
                         userTotalEarnedDaily[levels[i]][
@@ -463,7 +444,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     } else {
                         uint remaining = share - value;
                         usdt.safeTransfer(levels[i], value);
-                        emit SentUsdt(msg.sender, levels[i], value);
 
                         userTotalEarned[levels[i]] += value;
                         userTotalEarnedDaily[levels[i]][
@@ -485,7 +465,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
                     if (value > newShare) {
                         usdt.safeTransfer(levels[i], newShare);
-                        emit SentUsdt(msg.sender, levels[i], newShare);
 
                         userTotalEarned[levels[i]] += newShare;
                         userTotalEarnedDaily[levels[i]][
@@ -496,7 +475,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     } else {
                         uint remaining = newShare - value;
                         usdt.safeTransfer(levels[i], value);
-                        emit SentUsdt(msg.sender, levels[i], value);
 
                         userTotalEarned[levels[i]] += value;
                         userTotalEarnedDaily[levels[i]][

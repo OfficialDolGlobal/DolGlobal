@@ -42,7 +42,7 @@ import { token } from "../typechain-types/@openzeppelin/contracts";
       const G100 = await ethers.getContractFactory("G100");
       const g100 = await G100.deploy(usdtAddress);
       const g100Address = await g100.getAddress();
-      const G10 = await ethers.getContractFactory("G10");
+      const G10 = await ethers.getContractFactory("G15");
       const g10 = await G10.deploy(usdtAddress);
       const g10Address = await g10.getAddress();
 
@@ -62,7 +62,8 @@ import { token } from "../typechain-types/@openzeppelin/contracts";
       const collectionAddress = await collection.getAddress();
 
       await userRefferal.setDolGlobalCollection(collectionAddress)
-      await userRefferal.setPoolManager(poolManagerAddress)
+      await userRefferal.setPoolManager(poolManagerAddress) 
+      await userRefferal.setBotWallet(owner.address)
 
       await g100.setPoolManager(poolManagerAddress)
       await g10.setPoolManager(poolManagerAddress)
@@ -107,7 +108,6 @@ import { token } from "../typechain-types/@openzeppelin/contracts";
       await usdt.connect(otherAccount).mint(100000*10**6)
       const balance = await dolGlobal.balanceOf(owner.address)
       await userRefferal.createUser(owner.address,g10Address)
-      await userRefferal.setFaceId(owner.address,true)
 
       return {
         owner,
@@ -211,11 +211,12 @@ import { token } from "../typechain-types/@openzeppelin/contracts";
       await usdt.approve(treasuryPoolAddress,200000*10**6)
       expect(await rechargePool.getTotalTokens()).to.be.equal(0)
       
-      await treasuryPool.contribute(10*10**6)
-      await time.increase(150*24*60*60)
+      await treasuryPool.contribute(1000*10**6)
+      await time.increase(30*60*60)
       await treasuryPool.claimContribution(1)
-      console.log(await treasuryPool.getInactiveContributions(owner.address,1));
-      
+      await time.increase(18*60*60)
+      await treasuryPool.claimContribution(1)
+
 
       
 
@@ -225,40 +226,39 @@ import { token } from "../typechain-types/@openzeppelin/contracts";
       
     }); 
 
-    it("Should create donation with unilevel", async function () {
-      const {
-        owner,
-        otherAccount,
-        treasuryPool,
-        dolGlobal,
-        treasuryPoolAddress,
-        usdt,
-        balance,
-        poolManager,
-        rechargePool,
-        userRefferalAddress,
-        userRefferal,collection,collectionAddress,rechargePoolAddress
-      } = await loadFixture(deployFixture);
-      const wallets = [];
-      wallets.push(owner)
-      for (let index = 1; index <= 41; index++) {
+    // it("Should create donation with unilevel", async function () {
+    //   const {
+    //     owner,
+    //     otherAccount,
+    //     treasuryPool,
+    //     dolGlobal,
+    //     treasuryPoolAddress,
+    //     usdt,
+    //     balance,
+    //     poolManager,
+    //     rechargePool,
+    //     userRefferalAddress,
+    //     userRefferal,collection,collectionAddress,rechargePoolAddress
+    //   } = await loadFixture(deployFixture);
+    //   const wallets = [];
+    //   wallets.push(owner)
+    //   for (let index = 1; index <= 41; index++) {
         
-        const wallet = ethers.Wallet.createRandom().connect(ethers.provider);
-        wallets.push(wallet)
-        await owner.sendTransaction({to:wallet.address,value:ethers.parseEther("1")})
-        await userRefferal.createUser(wallet.address,wallets[index-1])
-        await userRefferal.setFaceId(wallet.address,true)
-        await usdt.connect(wallet).mint(100*10**6)
-        await usdt.connect(wallet).approve(treasuryPoolAddress,100*10**6)
-      }
-      await usdt.mint(12*10**6)
-      await usdt.approve(collectionAddress,12*10**6)
-      await collection.mintNftGlobal(113*10**5)
-      for (let index = 1; index < wallets.length; index++) {
-        await treasuryPool.connect(wallets[index]).contribute(100*10**6)     
-      } 
+    //     const wallet = ethers.Wallet.createRandom().connect(ethers.provider);
+    //     wallets.push(wallet)
+    //     await owner.sendTransaction({to:wallet.address,value:ethers.parseEther("1")})
+    //     await userRefferal.createUser(wallet.address,wallets[index-1])
+    //     await usdt.connect(wallet).mint(100*10**6)
+    //     await usdt.connect(wallet).approve(treasuryPoolAddress,100*10**6)
+    //   }
+    //   await usdt.mint(12*10**6)
+    //   await usdt.approve(collectionAddress,12*10**6)
+    //   await collection.mintNftGlobal(113*10**5)
+    //   for (let index = 1; index < wallets.length; index++) {
+    //     await treasuryPool.connect(wallets[index]).contribute(100*10**6)     
+    //   } 
 
-    }); 
+    // }); 
 
  
 

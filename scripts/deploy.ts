@@ -103,16 +103,16 @@ async function main() {
 
       // await runCommand(userRefferalAddressMulticall,[userParamsMulticall[0]])
 
-      const PaymentTrackerParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa"]
+      // const PaymentTrackerParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa"]
 
 
-      const PaymentTracker = await ethers.getContractFactory("PaymentTracker");
-      const paymentTracker = await PaymentTracker.deploy(PaymentTrackerParams[0]);
-      await paymentTracker.waitForDeployment()
-      const paymentTrackerAddress = await paymentTracker.getAddress();
-      console.log("paymentTrackerAddress "+paymentTrackerAddress);
+      // const PaymentTracker = await ethers.getContractFactory("PaymentTracker");
+      // const paymentTracker = await PaymentTracker.deploy(PaymentTrackerParams[0]);
+      // await paymentTracker.waitForDeployment()
+      // const paymentTrackerAddress = await paymentTracker.getAddress();
+      // console.log("paymentTrackerAddress "+paymentTrackerAddress);
 
-      await runCommand(paymentTrackerAddress,[PaymentTrackerParams[0]])
+      // await runCommand(paymentTrackerAddress,[PaymentTrackerParams[0]])
 
       // const poolManagerParams = ["0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",userRefferalAddress]
 
@@ -126,15 +126,15 @@ async function main() {
       // await(await poolManager.setUniswapOracle("0xF998e67148839D1bCC9aEC3d23Cf1e8C39821a37",{gasPrice:ethers.parseUnits("300","gwei")})).wait()
       // await(await poolManager.setLiquidityPoolUniswapId(2404342,{gasPrice:ethers.parseUnits("300","gwei")})).wait()
 
-      // const DolGlobalCollection = await ethers.getContractFactory("DolGlobalCollection");
+      const DolGlobalCollection = await ethers.getContractFactory("DolGlobalCollection");
 
-      // const collectionParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",poolManagerAddress,userRefferalAddress,"0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C"]
-      // const collection = await DolGlobalCollection.deploy(collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3],{gasPrice:ethers.parseUnits("300","gwei")});
-      // await collection.waitForDeployment()
-      // const collectionAddress = await collection.getAddress();
-      // console.log("collectionAddress "+collectionAddress);
+      const collectionParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",poolManagerAddress,userRefferalAddress,"0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C"]
+      const collection = await DolGlobalCollection.deploy(collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3],{gasPrice:ethers.parseUnits("300","gwei")});
+      await collection.waitForDeployment()
+      const collectionAddress = await collection.getAddress();
+      console.log("collectionAddress "+collectionAddress);
 
-      // await runCommand(collectionAddress,[collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3]])
+      await runCommand(collectionAddress,[collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3]])
 
     // await(await g10.setPoolManager(poolManagerAddress)).wait();
     // await(await g10.setUserContract(userRefferalAddress)).wait();

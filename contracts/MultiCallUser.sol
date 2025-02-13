@@ -34,14 +34,6 @@ contract MultiCallUser is Ownable2Step {
             } catch {
                 emit TransactionFailed(users[i], 'createUser', 'Unknown error');
             }
-
-            try userDolContract.setFaceId(users[i], true) {} catch Error(
-                string memory reason
-            ) {
-                emit TransactionFailed(users[i], 'setFaceId', reason);
-            } catch {
-                emit TransactionFailed(users[i], 'setFaceId', 'Unknown error');
-            }
         }
     }
 }

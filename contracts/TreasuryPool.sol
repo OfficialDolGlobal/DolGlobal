@@ -76,7 +76,11 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
             return 0;
         }
         uint amount = calculateValue(user, index, daysElapsed);
-
+        if (userDonation.daysPaid + daysElapsed == MAX_PERIOD) {
+            return
+                (daysElapsed * CLAIM_PERIOD) -
+                (block.timestamp - userDonation.lastClaimTimestamp);
+        }
         if (amount < 10e6) {
             while (amount < 10e6) {
                 ++daysElapsed;
@@ -132,7 +136,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         token.approve(address(poolManager), amountToken);
         poolManager.increaseLiquidityPoolUniswap(
             (amount * 6) / 100,
-            ((amountToken * 23076) / 100000)
+            ((amountToken * 2308) / 10000)
         );
         poolManager.distributeUnilevelUsdt(msg.sender, (amount * 38) / 100);
 
@@ -225,6 +229,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
 
         return inactiveContributions;
     }
+
     function calculateDaysElapsedToClaim(
         address user,
         uint index
@@ -295,7 +300,9 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         uint amount = calculateValue(user, index, daysElapsed);
 
         uint currentPrice = poolManager.getAmountValue(1 ether);
-
+        if (userDonation.daysPaid + daysElapsed == MAX_PERIOD) {
+            return (amount, (amount * 1e18) / currentPrice);
+        }
         if (amount < 10e6) {
             while (amount < 10e6) {
                 ++daysElapsed;
@@ -363,7 +370,9 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         require(daysElapsed > 0, 'Tokens are still locked');
 
         users[msg.sender][index].daysPaid += daysElapsed;
-        users[msg.sender][index].lastClaimTimestamp = block.timestamp;
+        users[msg.sender][index].lastClaimTimestamp =
+            users[msg.sender][index].startedTimestamp +
+            (users[msg.sender][index].daysPaid * CLAIM_PERIOD);
         uint totalValueInUSD = calculateValue(msg.sender, index, daysElapsed);
         require(
             totalValueInUSD >= 10e6 ||
