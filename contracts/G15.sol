@@ -17,6 +17,7 @@ contract G15 is Ownable2Step, ReentrancyGuard {
     address[MAX_QUANTITY_OF_USERS] public addresses;
     IERC20 immutable usdt;
     IPoolManager poolManager;
+    uint public totalLosted;
     address userContract;
 
     uint public balanceFree;
@@ -106,6 +107,7 @@ contract G15 is Ownable2Step, ReentrancyGuard {
         }
         if (excess > 0) {
             usdt.approve(address(poolManager), excess);
+            totalLosted += excess;
             poolManager.increaseLiquidityReservePool(excess);
         }
     }
@@ -123,5 +125,14 @@ contract G15 is Ownable2Step, ReentrancyGuard {
         bought[msg.sender][getDayStartTimestamp(block.timestamp)] = true;
         usdt.approve(address(poolManager), dailyPayment);
         poolManager.increaseLiquidityReservePool(dailyPayment);
+    }
+
+    function isUserInG15(address user) public view returns (bool) {
+        for (uint i = 0; i < MAX_QUANTITY_OF_USERS; i++) {
+            if (addresses[i] == user) {
+                return true;
+            }
+        }
+        return false;
     }
 }

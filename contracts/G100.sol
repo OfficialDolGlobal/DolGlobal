@@ -13,6 +13,8 @@ contract G100 is Ownable2Step, ReentrancyGuard {
     address[100] private addresses;
     IERC20 immutable usdt;
     IPoolManager poolManager;
+    uint public totalLosted;
+
     uint public balanceFree;
     uint public price;
     uint public actualMaxRoof;
@@ -52,6 +54,11 @@ contract G100 is Ownable2Step, ReentrancyGuard {
     function claim() external nonReentrant {
         if (balanceFree > 0) {
             distribute();
+        }
+        if (roofReached[msg.sender] == maxRoof[msg.sender]) {
+            roofReached[msg.sender] = 0;
+            maxRoof[msg.sender] = 0;
+            hasPosition[msg.sender] = false;
         }
         uint valueToClaim = claimAvailable[msg.sender];
         claimAvailable[msg.sender] = 0;
@@ -121,6 +128,7 @@ contract G100 is Ownable2Step, ReentrancyGuard {
         }
         if (excess > 0) {
             usdt.approve(address(poolManager), excess);
+            totalLosted += excess;
             poolManager.increaseLiquidityReservePool(excess);
         }
     }

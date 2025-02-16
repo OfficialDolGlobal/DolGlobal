@@ -212,10 +212,11 @@ import { token } from "../typechain-types/@openzeppelin/contracts";
       expect(await rechargePool.getTotalTokens()).to.be.equal(0)
       
       await treasuryPool.contribute(1000*10**6)
-      await time.increase(30*60*60)
+      await time.increase(69*24*60*60)
       await treasuryPool.claimContribution(1)
-      await time.increase(18*60*60)
-      await treasuryPool.claimContribution(1)
+      console.log(await treasuryPool.timeUntilNextWithdrawal(owner.address,1));
+      await time.increase(24*60*60*1000)
+      console.log(await treasuryPool.timeUntilNextWithdrawal(owner.address,1));
 
 
       

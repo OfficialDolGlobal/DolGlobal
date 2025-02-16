@@ -77,9 +77,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         }
         uint amount = calculateValue(user, index, daysElapsed);
         if (userDonation.daysPaid + daysElapsed == MAX_PERIOD) {
-            return
-                (daysElapsed * CLAIM_PERIOD) -
-                (block.timestamp - userDonation.lastClaimTimestamp);
+            return 0;
         }
         if (amount < 10e6) {
             while (amount < 10e6) {

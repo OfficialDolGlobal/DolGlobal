@@ -16,10 +16,12 @@ contract Top5 is Ownable2Step, ReentrancyGuard {
         uint valueReached;
         uint price;
     }
-    uint maxValue;
+    uint public maxValue;
     uint lastUpdate;
+    uint public totalLosted;
+    address private lastBuyer;
 
-    UserTop5 user;
+    UserTop5 public user;
     bool public availableToBuy;
     IERC20 immutable usdt;
 
@@ -32,22 +34,29 @@ contract Top5 is Ownable2Step, ReentrancyGuard {
         usdt = IERC20(_usdt);
     }
     function setPoolManager(address _poolManager) external onlyOwner {
+        require(
+            _poolManager != address(0),
+            'Pool manager address cannot be zero'
+        );
+
         poolManager = IPoolManager(_poolManager);
     }
 
     function setConfig(uint _maxValue, uint price) external onlyOwner {
         maxValue = _maxValue;
         user.price = price;
+        user.addressTop5 = address(0);
+        user.valueReached = 0;
         availableToBuy = true;
         lastUpdate = block.timestamp;
     }
-    function buyTop5() external {
+    function buyTop5() external nonReentrant {
         require(availableToBuy, 'Unavailable now');
         require(
-            block.timestamp > lastUpdate + 1 days ||
-                msg.sender == user.addressTop5,
+            block.timestamp > lastUpdate + 1 minutes || msg.sender == lastBuyer,
             'Purchase allowed after 24h or if you are a top 5 user.'
         );
+        lastBuyer = msg.sender;
         user.addressTop5 = msg.sender;
         user.maxValue = maxValue;
         availableToBuy = false;
@@ -65,12 +74,23 @@ contract Top5 is Ownable2Step, ReentrancyGuard {
     function increaseValue(uint amount) external nonReentrant {
         usdt.safeTransferFrom(msg.sender, address(this), amount);
         if (user.addressTop5 == address(0)) {
+            totalLosted += amount;
             usdt.approve(address(poolManager), amount);
             poolManager.increaseLiquidityReservePool(amount);
         } else {
-            user.valueReached += amount;
-            usdt.safeTransfer(user.addressTop5, amount);
-            emit UsdtSent(user.addressTop5, amount);
+            if (user.valueReached + amount <= user.maxValue) {
+                user.valueReached += amount;
+                usdt.safeTransfer(user.addressTop5, amount);
+                emit UsdtSent(user.addressTop5, amount);
+            } else {
+                uint remaining = user.maxValue - user.valueReached;
+                user.valueReached = user.maxValue;
+                usdt.safeTransfer(user.addressTop5, remaining);
+                emit UsdtSent(user.addressTop5, remaining);
+                usdt.approve(address(poolManager), amount - remaining);
+                totalLosted += (amount - remaining);
+                poolManager.increaseLiquidityReservePool(amount - remaining);
+            }
         }
     }
 }
