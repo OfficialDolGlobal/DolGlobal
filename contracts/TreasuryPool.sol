@@ -282,24 +282,23 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
     function previewClaim(
         address user,
         uint index
-    ) external view returns (uint valueUsdt, uint valueDol) {
+    ) external view returns (uint valueUsdt) {
         require(
             index > 0 && index <= userTotalContributions[user],
             'Invalid Index'
         );
         if (userTotalContributions[user] == 0) {
-            return (0, 0);
+            return (0);
         }
         Donation.UserDonation memory userDonation = users[user][index];
         if (userDonation.daysPaid == MAX_PERIOD) {
-            return (0, 0);
+            return (0);
         }
         uint daysElapsed = calculateDaysElapsedToClaim(user, index);
         uint amount = calculateValue(user, index, daysElapsed);
 
-        uint currentPrice = poolManager.getAmountValue(1 ether);
         if (userDonation.daysPaid + daysElapsed == MAX_PERIOD) {
-            return (amount, (amount * 1e18) / currentPrice);
+            return (amount);
         }
         if (amount < 10e6) {
             while (amount < 10e6) {
@@ -307,17 +306,17 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
                 amount = calculateValue(user, index, daysElapsed);
 
                 if (userDonation.daysPaid + daysElapsed == MAX_PERIOD) {
-                    return (amount, (amount * 1e18) / currentPrice);
+                    return (amount);
                 }
             }
         }
-        return (amount, (amount * 1e18) / currentPrice);
+        return (amount);
     }
 
     function calculateDailyGain(
         address user,
         uint startIndex
-    ) external view returns (uint dailyGainUs, uint dailyGainDol) {
+    ) external view returns (uint dailyGainUs) {
         require(
             startIndex > 0 && startIndex <= userTotalContributions[user],
             'Invalid Index'
@@ -337,9 +336,6 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
             }
             ++count;
         }
-        uint currentPrice = poolManager.getAmountValue(1 ether);
-
-        dailyGainDol = (dailyGainUs * 1e18) / currentPrice;
     }
 
     function calculateValue(

@@ -72,7 +72,9 @@ contract TreasuryPoolMocked is ReentrancyGuard, Ownable2Step {
             return 0;
         }
         uint amount = calculateValue(user, index, daysElapsed);
-
+        if (userDonation.daysPaid + daysElapsed == MAX_PERIOD) {
+            return 0;
+        }
         if (amount < 10e6) {
             while (amount < 10e6) {
                 ++daysElapsed;
