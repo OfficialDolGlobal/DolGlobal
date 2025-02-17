@@ -90,7 +90,7 @@ contract DolGlobalCollection is
         return users[user].maxUnilevel - users[user].unilevelReached;
     }
 
-    function uri(uint256 tokenId) public view override returns (string memory) {
+    function uri() public pure returns (string memory) {
         return TOKEN_URI;
     }
 
