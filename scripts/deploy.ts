@@ -81,38 +81,37 @@ async function main() {
       // console.log("g10Address: ",g10Address);
       // await runCommand(g10Address,[paramsTop5[0]])
 
-      const userParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C"]
+      // const userParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C"]
 
 
-      const UserRefferal = await ethers.getContractFactory("UserDolGlobal");
-      const userRefferal = await UserRefferal.deploy(userParams[0],userParams[1],userParams[2],userParams[3],userParams[4],userParams[5],userParams[6],userParams[7],userParams[8],{gasPrice:ethers.parseUnits("100","gwei")});
-      await userRefferal.waitForDeployment()
-      const userRefferalAddress = await userRefferal.getAddress();
-      console.log("userRefferalAddress "+userRefferalAddress);
+      // const UserRefferal = await ethers.getContractFactory("UserDolGlobal");
+      // const userRefferal = await UserRefferal.deploy(userParams[0],userParams[1],userParams[2],userParams[3],userParams[4],userParams[5],userParams[6],userParams[7],userParams[8],{gasPrice:ethers.parseUnits("100","gwei")});
+      // await userRefferal.waitForDeployment()
+      // const userRefferalAddress = await userRefferal.getAddress();
+      // console.log("userRefferalAddress "+userRefferalAddress);
 
-      await runCommand(userRefferalAddress,[userParams[0],userParams[1],userParams[2],userParams[3],userParams[4],userParams[5],userParams[6],userParams[7],userParams[8]])
+      // await runCommand(userRefferalAddress,[userParams[0],userParams[1],userParams[2],userParams[3],userParams[4],userParams[5],userParams[6],userParams[7],userParams[8]])
 
-      const userParamsMulticall = [userRefferalAddress]
-
-
-      const UserRefferalMulticall = await ethers.getContractFactory("MultiCallUser");
-      const userRefferalMulticall = await UserRefferalMulticall.deploy(userParamsMulticall[0]);
-      await userRefferalMulticall.waitForDeployment()
-      const userRefferalAddressMulticall = await userRefferalMulticall.getAddress();
-      console.log("userRefferalAddressMulticall "+userRefferalAddressMulticall);
-
-      await runCommand(userRefferalAddressMulticall,[userParamsMulticall[0]])
-
-      // const PaymentTrackerParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa"]
+      // const userParamsMulticall = [userRefferalAddress]
 
 
-      // const PaymentTracker = await ethers.getContractFactory("PaymentTracker");
-      // const paymentTracker = await PaymentTracker.deploy(PaymentTrackerParams[0]);
-      // await paymentTracker.waitForDeployment()
-      // const paymentTrackerAddress = await paymentTracker.getAddress();
-      // console.log("paymentTrackerAddress "+paymentTrackerAddress);
+      // const UserRefferalMulticall = await ethers.getContractFactory("MultiCallUser");
+      // const userRefferalMulticall = await UserRefferalMulticall.deploy(userParamsMulticall[0]);
+      // await userRefferalMulticall.waitForDeployment()
+      // const userRefferalAddressMulticall = await userRefferalMulticall.getAddress();
+      // console.log("userRefferalAddressMulticall "+userRefferalAddressMulticall);
 
-      // await runCommand(paymentTrackerAddress,[PaymentTrackerParams[0]])
+      // await runCommand(userRefferalAddressMulticall,[userParamsMulticall[0]])
+
+
+
+      const PaymentTracker = await ethers.getContractFactory("PaymentTracker");
+      const paymentTracker = await PaymentTracker.deploy();
+      await paymentTracker.waitForDeployment()
+      const paymentTrackerAddress = await paymentTracker.getAddress();
+      console.log("paymentTrackerAddress "+paymentTrackerAddress);
+
+      await runCommand(paymentTrackerAddress,[])
 
     //   const poolManagerParams = ["0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",userRefferalAddress]
 
@@ -189,7 +188,7 @@ async function main() {
       // await (await g10.setPoolManager(poolManagerAddress)).wait()
 
 
-      // const treasuryParams = ["0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",poolManagerAddress]
+      // const treasuryParams = ["0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa","0xbA8367bA556110c926d85998d6DDbd5c8b882099"]
 
       // const TreasuryPool = await ethers.getContractFactory("TreasuryPool");
       // const treasuryPool = await TreasuryPool.deploy(

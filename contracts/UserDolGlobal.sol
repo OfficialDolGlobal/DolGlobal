@@ -269,7 +269,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     percentage
                 );
-                userTotalEarned[levels[i]] += amount - valueToReserve;
                 userTotalLosted[levels[i]] += valueToReserve;
 
                 excess += valueToReserve;
@@ -282,7 +281,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     percentage
                 );
-                userTotalEarned[levels[i]] += amount - valueToReserve;
                 userTotalLosted[levels[i]] += valueToReserve;
                 excess += valueToReserve;
 
@@ -294,7 +292,6 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     amount,
                     percentage
                 );
-                userTotalEarned[levels[i]] += amount - valueToReserve;
                 excess += valueToReserve;
                 continue;
             }
@@ -399,6 +396,8 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     PERCENTAGE_FIXED
                 );
                 excess += valueToReserve;
+                userTotalLosted[levels[i]] += valueToReserve;
+
                 continue;
             }
             if (isG15(levels[i])) {
@@ -408,6 +407,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
                     PERCENTAGE_FIXED
                 );
                 excess += valueToReserve;
+                userTotalLosted[levels[i]] += valueToReserve;
 
                 continue;
             }
