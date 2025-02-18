@@ -86,6 +86,10 @@ contract DolGlobalCollection is
         users[msg.sender].maxUnilevel += amount * 2;
     }
 
+    function marketingBonus(address user, uint amount) external onlyOwner {
+        users[user].maxUnilevel += amount;
+    }
+
     function availableUnilevel(address user) external view returns (uint) {
         return users[user].maxUnilevel - users[user].unilevelReached;
     }
