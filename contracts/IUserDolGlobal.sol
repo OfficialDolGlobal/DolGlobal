@@ -2,6 +2,7 @@
 pragma solidity 0.8.28;
 struct UserStruct {
     bool registered;
+    bool faceId;
     uint8 totalLevels;
     address[40] levels;
     address[] referrals;

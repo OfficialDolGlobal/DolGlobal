@@ -117,7 +117,7 @@ contract PoolManager is Ownable2Step {
     }
     function isFaceIdVerified(address _user) external view returns (bool) {
         UserStruct memory user = userDolGlobal.getUser(_user);
-        return user.registered;
+        return user.registered && user.faceId;
     }
 
     function setLockPoolUniswapId(uint lockId) external onlyOwner {

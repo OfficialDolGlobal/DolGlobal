@@ -12,6 +12,7 @@ import './ITopG.sol';
 
 struct UserStruct {
     bool registered;
+    bool faceId;
     uint8 totalLevels;
     address[40] levels;
     address[] referrals;
@@ -82,6 +83,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
         users[_top1] = UserStruct({
             registered: false,
+            faceId: false,
             totalLevels: 0,
             levels: levels40,
             referrals: referrals
@@ -89,6 +91,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
         levels40[0] = _top1;
         users[_top2] = UserStruct({
             registered: false,
+            faceId: false,
             totalLevels: 1,
             levels: levels40,
             referrals: referrals
@@ -98,6 +101,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
         users[_top1].referrals.push(_top2);
         users[_top3] = UserStruct({
             registered: false,
+            faceId: false,
             totalLevels: 2,
             levels: levels40,
             referrals: referrals
@@ -109,6 +113,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
         users[_top4] = UserStruct({
             registered: false,
+            faceId: false,
             totalLevels: 3,
             levels: levels40,
             referrals: referrals
@@ -121,6 +126,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
         users[_top5] = UserStruct({
             registered: false,
+            faceId: false,
             totalLevels: 4,
             levels: levels40,
             referrals: referrals
@@ -135,6 +141,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
         users[_g100] = UserStruct({
             registered: false,
+            faceId: false,
             totalLevels: 5,
             levels: levels40,
             referrals: referrals
@@ -150,6 +157,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
 
         users[_g15] = UserStruct({
             registered: true,
+            faceId: false,
             totalLevels: 6,
             levels: levels40,
             referrals: referrals
@@ -187,7 +195,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
         collection = IDolGlobalCollection(_collection);
     }
 
-    function createUser(address user, address _sponsor) public onlyBot {
+    function createUser(address user, address _sponsor) public {
         require(_sponsor != address(0), 'Zero address');
         require(user != address(0), 'Zero address');
 
@@ -209,6 +217,9 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
             sponsor.totalLevels + 1 <= 40 ? sponsor.totalLevels + 1 : 40
         );
         emit UserAdded(user, _sponsor);
+    }
+    function setFaceId(address user) external onlyBot {
+        users[user].faceId = true;
     }
     function viewTotalEarnedInADay(
         address user,
