@@ -196,6 +196,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
     }
 
     function createUser(address user, address _sponsor) public {
+        require(user == msg.sender, 'user must be msg.sender');
         require(_sponsor != address(0), 'Zero address');
         require(user != address(0), 'Zero address');
 

@@ -16,13 +16,10 @@ contract MultiCallUser is Ownable2Step {
     }
 
     function createBatchTransactions(
-        address[] calldata users,
-        address[] calldata sponsors
+        address[] calldata users
     ) external onlyOwner {
-        require(users.length == sponsors.length, 'Invalid');
-
         for (uint i = 0; i < users.length; i++) {
-            try userDolContract.createUser(users[i], sponsors[i]) {} catch {}
+            userDolContract.setFaceId(users[i]);
         }
     }
 }
