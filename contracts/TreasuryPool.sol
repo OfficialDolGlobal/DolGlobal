@@ -331,7 +331,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         ) {
             uint daysElapsed = calculateDaysElapsedToClaim(user, i);
 
-            if (users[user][i].daysPaid + daysElapsed <= MAX_PERIOD) {
+            if (users[user][i].daysPaid + daysElapsed < MAX_PERIOD) {
                 dailyGainUs += users[user][i].balance / MAX_PERIOD;
             }
             ++count;
