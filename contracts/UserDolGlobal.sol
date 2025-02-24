@@ -27,7 +27,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
     mapping(address => uint) public userTotalEarned;
     mapping(address => uint) public userTotalLosted;
     mapping(address => mapping(uint => uint)) private userTotalEarnedDaily;
-    mapping(address => bool) private blacklisted;
+    mapping(address => bool) public blacklisted;
 
     uint constant MAX_CLAIM_DAILY = 10000e6;
     uint maxDailyTop5Individual = 5000e6;
