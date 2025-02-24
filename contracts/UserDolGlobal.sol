@@ -170,7 +170,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
         require(msg.sender == bot, 'Only bot can call this function');
         _;
     }
-    function changeBlackList(address user, bool flag) external onlyOwner {
+    function changeBlackList(address user, bool flag) external onlyBot {
         blacklisted[user] = flag;
     }
 

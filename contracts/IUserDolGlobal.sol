@@ -15,4 +15,5 @@ interface IUserDolGlobal {
     ) external view returns (UserStruct memory);
     function createUser(address user, address _sponsor) external;
     function setFaceId(address user) external;
+    function changeBlackList(address user, bool flag) external;
 }
