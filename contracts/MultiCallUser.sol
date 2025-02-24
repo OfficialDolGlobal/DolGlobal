@@ -22,11 +22,4 @@ contract MultiCallUser is Ownable2Step {
             userDolContract.setFaceId(users[i]);
         }
     }
-    function changeBatchTransactions(
-        address[] calldata users
-    ) external onlyOwner {
-        for (uint i = 0; i < users.length; i++) {
-            userDolContract.changeBlackList(users[i], true);
-        }
-    }
 }
