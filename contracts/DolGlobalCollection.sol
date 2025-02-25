@@ -23,8 +23,6 @@ contract DolGlobalCollection is
     IERC20 private immutable usdt;
     IERC20 private immutable dol;
 
-    string private constant TOKEN_URI =
-        'https://ipfs.io/ipfs/bafkreibrn7kjqh3mh7nhvu3thvcks4nr2nwbt4lol3xwhtqffxh7ljf6ge';
     mapping(address => NftGlobalStruct) public users;
     IPoolManager private immutable poolManager;
     address private immutable userContract;
@@ -34,7 +32,12 @@ contract DolGlobalCollection is
         address _poolManager,
         address _userContract,
         address _dol
-    ) ERC1155('DolGlobal Collection') Ownable(msg.sender) {
+    )
+        ERC1155(
+            'https://ipfs.io/ipfs/bafkreibrn7kjqh3mh7nhvu3thvcks4nr2nwbt4lol3xwhtqffxh7ljf6ge'
+        )
+        Ownable(msg.sender)
+    {
         require(_poolManager != address(0), 'Invalid pool manager contract');
         require(_usdt != address(0), 'Invalid usdt contract');
         require(_userContract != address(0), 'Invalid user contract');
@@ -92,10 +95,6 @@ contract DolGlobalCollection is
 
     function availableUnilevel(address user) external view returns (uint) {
         return users[user].maxUnilevel - users[user].unilevelReached;
-    }
-
-    function uri() public pure returns (string memory) {
-        return TOKEN_URI;
     }
 
     function increaseGain(address user, uint amount) external onlyUserContract {

@@ -81,51 +81,51 @@ async function main() {
       // console.log("g10Address: ",g10Address);
       // await runCommand(g10Address,[paramsTop5[0]])
 
-      const userParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x3688435B39a5EeEe6ead83Ee6ca195A462995818","0x2A3b594ec6b71Caf7f825c8Ef16A4E40Eb1e2359","0xA78455197dcE8E423Cad9B66eC892760E5bde340","0x8D16A85bB23C69dD0012Cfd579222528cd8a6120","0x004799982bC3d54cDb6fa20A2c9155800e27D50F","0xD13093ECE5401983911d16C77777A2Cea7f82117","0xdec93C12c9C2a82077b36F4375E0495B5F6063D4"]
+      // const userParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa","0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0x3688435B39a5EeEe6ead83Ee6ca195A462995818","0x2A3b594ec6b71Caf7f825c8Ef16A4E40Eb1e2359","0xA78455197dcE8E423Cad9B66eC892760E5bde340","0x8D16A85bB23C69dD0012Cfd579222528cd8a6120","0x004799982bC3d54cDb6fa20A2c9155800e27D50F","0xD13093ECE5401983911d16C77777A2Cea7f82117","0xdec93C12c9C2a82077b36F4375E0495B5F6063D4"]
 
 
-      const UserRefferal = await ethers.getContractFactory("UserDolGlobal");
-      const userRefferal = await UserRefferal.deploy(userParams[0],userParams[1],userParams[2],userParams[3],userParams[4],userParams[5],userParams[6],userParams[7],userParams[8],{gasPrice:ethers.parseUnits("100","gwei")});
-      await userRefferal.waitForDeployment()
-      const userRefferalAddress = await userRefferal.getAddress();
-      console.log("userRefferalAddress "+userRefferalAddress);
+      // const UserRefferal = await ethers.getContractFactory("UserDolGlobal");
+      // const userRefferal = await UserRefferal.deploy(userParams[0],userParams[1],userParams[2],userParams[3],userParams[4],userParams[5],userParams[6],userParams[7],userParams[8],{gasPrice:ethers.parseUnits("100","gwei")});
+      // await userRefferal.waitForDeployment()
+      // const userRefferalAddress = await userRefferal.getAddress();
+      // console.log("userRefferalAddress "+userRefferalAddress);
 
-      await runCommand(userRefferalAddress,[userParams[0],userParams[1],userParams[2],userParams[3],userParams[4],userParams[5],userParams[6],userParams[7],userParams[8]])
+      // await runCommand(userRefferalAddress,[userParams[0],userParams[1],userParams[2],userParams[3],userParams[4],userParams[5],userParams[6],userParams[7],userParams[8]])
 
-      const userParamsMulticall = [userRefferalAddress]
-
-
-      const UserRefferalMulticall = await ethers.getContractFactory("MultiCallUser");
-      const userRefferalMulticall = await UserRefferalMulticall.deploy(userParamsMulticall[0]);
-      await userRefferalMulticall.waitForDeployment()
-      const userRefferalAddressMulticall = await userRefferalMulticall.getAddress();
-      console.log("userRefferalAddressMulticall "+userRefferalAddressMulticall);
-
-      await runCommand(userRefferalAddressMulticall,[userParamsMulticall[0]])
+      // const userParamsMulticall = [userRefferalAddress]
 
 
+      // const UserRefferalMulticall = await ethers.getContractFactory("MultiCallUser");
+      // const userRefferalMulticall = await UserRefferalMulticall.deploy(userParamsMulticall[0]);
+      // await userRefferalMulticall.waitForDeployment()
+      // const userRefferalAddressMulticall = await userRefferalMulticall.getAddress();
+      // console.log("userRefferalAddressMulticall "+userRefferalAddressMulticall);
 
-      const poolManagerParams = ["0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",userRefferalAddress]
+      // await runCommand(userRefferalAddressMulticall,[userParamsMulticall[0]])
 
-      const PoolManager = await ethers.getContractFactory("PoolManager");
-      const poolManager = await PoolManager.deploy(poolManagerParams[0],poolManagerParams[1],poolManagerParams[2],{gasPrice:ethers.parseUnits("100","gwei")});
-      await poolManager.waitForDeployment()
-      const poolManagerAddress = await poolManager.getAddress();
-      console.log("poolManagerAddress "+poolManagerAddress);
 
-      await runCommand(poolManagerAddress,[poolManagerParams[0],poolManagerParams[1],poolManagerParams[2]])
-      await(await poolManager.setUniswapOracle("0xF998e67148839D1bCC9aEC3d23Cf1e8C39821a37",{gasPrice:ethers.parseUnits("100","gwei")})).wait()
-      await(await poolManager.setLiquidityPoolUniswapId(2404342,{gasPrice:ethers.parseUnits("100","gwei")})).wait()
 
-      const DolGlobalCollection = await ethers.getContractFactory("DolGlobalCollection");
+      // const poolManagerParams = ["0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",userRefferalAddress]
 
-      const collectionParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",poolManagerAddress,userRefferalAddress,"0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C"]
-      const collection = await DolGlobalCollection.deploy(collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3],{gasPrice:ethers.parseUnits("100","gwei")});
-      await collection.waitForDeployment()
-      const collectionAddress = await collection.getAddress();
-      console.log("collectionAddress "+collectionAddress);
+      // const PoolManager = await ethers.getContractFactory("PoolManager");
+      // const poolManager = await PoolManager.deploy(poolManagerParams[0],poolManagerParams[1],poolManagerParams[2],{gasPrice:ethers.parseUnits("100","gwei")});
+      // await poolManager.waitForDeployment()
+      // const poolManagerAddress = await poolManager.getAddress();
+      // console.log("poolManagerAddress "+poolManagerAddress);
 
-      await runCommand(collectionAddress,[collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3]])
+      // await runCommand(poolManagerAddress,[poolManagerParams[0],poolManagerParams[1],poolManagerParams[2]])
+      // await(await poolManager.setUniswapOracle("0xF998e67148839D1bCC9aEC3d23Cf1e8C39821a37",{gasPrice:ethers.parseUnits("100","gwei")})).wait()
+      // await(await poolManager.setLiquidityPoolUniswapId(2404342,{gasPrice:ethers.parseUnits("100","gwei")})).wait()
+
+      // const DolGlobalCollection = await ethers.getContractFactory("DolGlobalCollection");
+
+      // const collectionParams = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",poolManagerAddress,userRefferalAddress,"0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C"]
+      // const collection = await DolGlobalCollection.deploy(collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3],{gasPrice:ethers.parseUnits("100","gwei")});
+      // await collection.waitForDeployment()
+      // const collectionAddress = await collection.getAddress();
+      // console.log("collectionAddress "+collectionAddress);
+
+      // await runCommand(collectionAddress,[collectionParams[0],collectionParams[1],collectionParams[2],collectionParams[3]])
 
     // await(await g10.setPoolManager(poolManagerAddress)).wait();
     // await(await g10.setUserContract(userRefferalAddress)).wait();
@@ -133,8 +133,8 @@ async function main() {
     // await(await g100.setPoolManager(poolManagerAddress)).wait();
 
 
-      await (await userRefferal.setDolGlobalCollection(collectionAddress,{gasPrice:ethers.parseUnits("100","gwei")})).wait()
-      await (await userRefferal.setPoolManager(poolManagerAddress,{gasPrice:ethers.parseUnits("100","gwei")})).wait()
+      // await (await userRefferal.setDolGlobalCollection(collectionAddress,{gasPrice:ethers.parseUnits("100","gwei")})).wait()
+      // await (await userRefferal.setPoolManager(poolManagerAddress,{gasPrice:ethers.parseUnits("100","gwei")})).wait()
 
 
   
@@ -180,28 +180,28 @@ async function main() {
       // await (await g10.setPoolManager(poolManagerAddress)).wait()
 
 
-      const treasuryParams = ["0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",poolManagerAddress]
+      // const treasuryParams = ["0x889E5Fa01be3Ab8A4480Ac0a52EbF1605EA6f64C","0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa",poolManagerAddress]
 
-      const TreasuryPool = await ethers.getContractFactory("TreasuryPool");
-      const treasuryPool = await TreasuryPool.deploy(
-        treasuryParams[0],
-        treasuryParams[1],
-        treasuryParams[2],{gasPrice:ethers.parseUnits("100","gwei")}
-      );
-      await treasuryPool.waitForDeployment()
-      const treasuryPoolAddress = await treasuryPool.getAddress();
-      console.log("treasuryPoolAddress "+treasuryPoolAddress);
+      // const TreasuryPool = await ethers.getContractFactory("TreasuryPool");
+      // const treasuryPool = await TreasuryPool.deploy(
+      //   treasuryParams[0],
+      //   treasuryParams[1],
+      //   treasuryParams[2],{gasPrice:ethers.parseUnits("100","gwei")}
+      // );
+      // await treasuryPool.waitForDeployment()
+      // const treasuryPoolAddress = await treasuryPool.getAddress();
+      // console.log("treasuryPoolAddress "+treasuryPoolAddress);
 
-      await runCommand(treasuryPoolAddress,[        treasuryParams[0],
-        treasuryParams[1],
-        treasuryParams[2]])
+      // await runCommand(treasuryPoolAddress,[        treasuryParams[0],
+      //   treasuryParams[1],
+      //   treasuryParams[2]])
 
 
-      await (await poolManager.setPools(PoolType.TREASURY,treasuryPoolAddress,{gasPrice:ethers.parseUnits("100","gwei")})).wait()
+      // await (await poolManager.setPools(PoolType.TREASURY,treasuryPoolAddress,{gasPrice:ethers.parseUnits("100","gwei")})).wait()
       
-      await (await poolManager.setPools(PoolType.RECHARGE,"0xa8Cda26d10611B7f9C6Ae808bD0FDcd513564140",{gasPrice:ethers.parseUnits("100","gwei")})).wait()
-      await (await poolManager.setPools(PoolType.DEVS,"0xfA66c51E617D3b04400418D8bcAb9b0493026311",{gasPrice:ethers.parseUnits("100","gwei")})).wait()
-      await (await poolManager.setPools(PoolType.MARKETING,"0x3f29872d5bBE60834A8B163B40332d965ad14f3F",{gasPrice:ethers.parseUnits("100","gwei")})).wait()
+      // await (await poolManager.setPools(PoolType.RECHARGE,"0xa8Cda26d10611B7f9C6Ae808bD0FDcd513564140",{gasPrice:ethers.parseUnits("100","gwei")})).wait()
+      // await (await poolManager.setPools(PoolType.DEVS,"0xfA66c51E617D3b04400418D8bcAb9b0493026311",{gasPrice:ethers.parseUnits("100","gwei")})).wait()
+      // await (await poolManager.setPools(PoolType.MARKETING,"0x3f29872d5bBE60834A8B163B40332d965ad14f3F",{gasPrice:ethers.parseUnits("100","gwei")})).wait()
 
 
       
