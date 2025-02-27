@@ -30,13 +30,13 @@ async function main() {
 
 
       
-      // const UniswapOracle = await ethers.getContractFactory("UniswapOracle");
-      // const oracle = await UniswapOracle.deploy();
-      // await oracle.waitForDeployment()
-      // const oracleAddress = await oracle.getAddress();
-      // console.log("oracleAddress "+oracleAddress);
+      const UniswapOracle = await ethers.getContractFactory("UniswapOracle");
+      const oracle = await UniswapOracle.deploy({gasPrice:ethers.parseUnits("100","gwei")});
+      await oracle.waitForDeployment()
+      const oracleAddress = await oracle.getAddress();
+      console.log("oracleAddress "+oracleAddress);
 
-      // await runCommand(oracleAddress,[])
+      await runCommand(oracleAddress,[])
 
       // const paramsTop5 = ["0xa3E0CE8a70F5376DFc1bd224Bd24254610539bDa"]
       // const Top5 = await ethers.getContractFactory("Top5");

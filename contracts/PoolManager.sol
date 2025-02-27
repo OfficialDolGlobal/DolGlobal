@@ -30,10 +30,11 @@ contract PoolManager is Ownable2Step {
     IManager public devPool;
     IManager public marketingPool;
     address public rechargePool;
-    address public constant reservePool =
-        0x1dbd97b0d2bc78d9B4dE3188180FAA44D9217f1D;
-    address public constant reservePool2 =
-        0x6e595E0d3Fa79a4a056e5875f8752225b57A0c9a;
+    address public secondaryOwner;
+    address public reservePool = 0x1dbd97b0d2bc78d9B4dE3188180FAA44D9217f1D;
+    address public reservePool2 = 0x6e595E0d3Fa79a4a056e5875f8752225b57A0c9a;
+    uint public percentage = 80;
+    uint public percentage2 = 20;
 
     ISwapRouter public immutable swapRouter;
     IUniswapOracle public oracle;
@@ -63,11 +64,42 @@ contract PoolManager is Ownable2Step {
         userDolGlobal = IUserDolGlobal(_userDolGlobal);
 
         usdt = IERC20(_usdt);
+        secondaryOwner = msg.sender; //0x5f6D64c7945d3cA0b4309D1C03436aa08dfa2371
+    }
+
+    function renounceSecondary() external onlySecondary {
+        secondaryOwner = address(0);
+    }
+
+    modifier onlySecondary() {
+        require(msg.sender == secondaryOwner, 'Not authorized');
+        _;
+    }
+    function setReservePercentages(
+        uint newPercentage1,
+        uint newPercentage2
+    ) external onlySecondary {
+        require(
+            newPercentage1 + newPercentage2 == 100,
+            'Percentages must sum 100'
+        );
+        percentage = newPercentage1;
+        percentage2 = newPercentage2;
+    }
+    function setReserveAddresses(
+        address newReserve1,
+        address newReserve2
+    ) external onlySecondary {
+        reservePool = newReserve1;
+        reservePool2 = newReserve2;
     }
     function increaseLiquidityReservePool(uint amount) external {
         usdt.safeTransferFrom(msg.sender, address(this), amount);
-        usdt.safeTransfer(reservePool, (amount * 8) / 10);
-        usdt.safeTransfer(reservePool2, (amount * 2) / 10);
+        uint amount1 = (amount * percentage) / 100;
+        uint amount2 = (amount * percentage2) / 100;
+
+        usdt.safeTransfer(reservePool, amount1);
+        usdt.safeTransfer(reservePool2, amount2);
     }
     function setUniswapOracle(address _oracle) external onlyOwner {
         oracle = IUniswapOracle(_oracle);
