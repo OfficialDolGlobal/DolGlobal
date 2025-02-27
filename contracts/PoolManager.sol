@@ -64,7 +64,7 @@ contract PoolManager is Ownable2Step {
         userDolGlobal = IUserDolGlobal(_userDolGlobal);
 
         usdt = IERC20(_usdt);
-        secondaryOwner = msg.sender; //0x5f6D64c7945d3cA0b4309D1C03436aa08dfa2371
+        secondaryOwner = 0x478A4958BE2506f30c14773d96c6c8Df4d9a2E41;
     }
 
     function renounceSecondary() external onlySecondary {
