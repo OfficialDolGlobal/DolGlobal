@@ -99,6 +99,10 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
     }
 
     function contribute(uint amount) external nonReentrant {
+        require(
+            poolManager.isFaceIdVerified(msg.sender),
+            'User not verified face id'
+        );
         require(amount >= 10e6, 'Amount must be greater than 10 dollars');
 
         ++userTotalContributions[msg.sender];

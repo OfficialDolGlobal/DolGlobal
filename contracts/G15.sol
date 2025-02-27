@@ -41,7 +41,7 @@ contract G15 is Ownable2Step, ReentrancyGuard {
     }
 
     function getDayStartTimestamp(uint timestamp) public pure returns (uint) {
-        return timestamp - (timestamp % 86400);
+        return timestamp - (timestamp % 1 days);
     }
 
     function setUserContract(address _userContract) external onlyOwner {
