@@ -31,4 +31,12 @@ interface IPoolManager {
     ) external;
 
     function isFaceIdVerified(address _user) external view returns (bool);
+    function swapOut(
+        address tokenIn,
+        address tokenOut,
+        uint24 fee,
+        address recipient,
+        uint amountOut,
+        uint amountInMaximum
+    ) external returns (uint amountIn);
 }

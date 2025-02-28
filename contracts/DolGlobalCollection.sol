@@ -82,10 +82,13 @@ contract DolGlobalCollection is
         dol.approve(address(poolManager), amountOut);
 
         uint rechargeAmount = (amountOut * 2) / 3;
-        uint liquidexAmount = (amountOut * 1) / 3;
+        uint uniswapLiquidityAmount = (amountOut * 1) / 3;
 
         poolManager.increaseLiquidityPool2(rechargeAmount);
-        poolManager.increaseLiquidityPoolUniswap((amount) / 10, liquidexAmount);
+        poolManager.increaseLiquidityPoolUniswap(
+            (amount) / 10,
+            uniswapLiquidityAmount
+        );
         users[msg.sender].maxUnilevel += amount * 2;
     }
 

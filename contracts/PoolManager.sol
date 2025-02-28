@@ -232,6 +232,36 @@ contract PoolManager is Ownable2Step {
 
         amountOut = swapRouter.exactInputSingle(params);
     }
+    function swapOut(
+        address tokenIn,
+        address tokenOut,
+        uint24 fee,
+        address recipient,
+        uint amountOut,
+        uint amountInMaximum
+    ) public returns (uint amountIn) {
+        ISwapRouter.ExactOutputSingleParams memory params;
+        IERC20(tokenIn).safeTransferFrom(
+            msg.sender,
+            address(this),
+            amountInMaximum
+        );
+        IERC20(tokenIn).approve(address(address(swapRouter)), amountInMaximum);
+
+        params = ISwapRouter.ExactOutputSingleParams({
+            tokenIn: tokenIn,
+            tokenOut: tokenOut,
+            fee: fee,
+            recipient: recipient,
+            deadline: block.timestamp + 60,
+            amountOut: amountOut,
+            amountInMaximum: amountInMaximum,
+            sqrtPriceLimitX96: 0
+        });
+
+        amountIn = swapRouter.exactOutputSingle(params);
+        IERC20(tokenIn).safeTransfer(msg.sender, amountInMaximum - amountIn);
+    }
 
     function increaseLiquidityPoolUniswap(
         uint256 amountUsdt,

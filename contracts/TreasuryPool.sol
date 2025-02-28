@@ -29,8 +29,9 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
     event UserClaimed(address indexed user, uint amount);
     event Burn(uint indexed amount);
 
-    uint24 private constant CLAIM_PERIOD = 1 days;
+    uint24 private constant CLAIM_PERIOD = 1 seconds;
     uint8 private constant MAX_PERIOD = 150;
+    uint8 public percentageSlippage = 110;
 
     IBurnable private immutable token;
     IPoolManager private immutable poolManager;
@@ -57,6 +58,10 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
     function addDistributionFunds(uint256 amount) external {
         token.safeTransferFrom(msg.sender, address(this), amount);
         distributionBalance += amount;
+    }
+
+    function changeSlippage(uint8 newSlippage) external onlyOwner {
+        percentageSlippage = newSlippage;
     }
 
     function timeUntilNextWithdrawal(
@@ -385,25 +390,28 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
             'Insufficient token balance for distribution'
         );
 
-        distributionBalance -= totalTokensToSend;
         if (users[msg.sender][index].daysPaid == MAX_PERIOD) {
             --activeContributionsQuantity[msg.sender];
         }
-        token.approve(address(poolManager), totalTokensToSend);
-        uint amountOut = poolManager.swap(
+        uint tokensToSwap = (totalTokensToSend * percentageSlippage) / 100;
+        token.approve(address(poolManager), tokensToSwap);
+        uint amountIn = poolManager.swapOut(
             address(token),
             address(usdt),
             10000,
-            totalTokensToSend,
-            address(this)
+            address(this),
+            totalValueInUSD,
+            tokensToSwap
         );
+        distributionBalance -= amountIn;
+
         users[msg.sender][index].claims.push((totalTokensToSend));
         users[msg.sender][index].claimPrice.push((currentPrice));
         users[msg.sender][index].claimsTimestamp.push(block.timestamp);
-        uint fee = amountOut / 100;
+        uint fee = totalValueInUSD / 100;
         usdt.approve(address(poolManager), fee);
         poolManager.increaseLiquidityDevPool(fee, address(usdt));
-        usdt.safeTransfer(msg.sender, (amountOut - fee));
+        usdt.safeTransfer(msg.sender, (totalValueInUSD - fee));
 
         emit UserClaimed(msg.sender, totalValueInUSD);
     }
