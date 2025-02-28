@@ -29,7 +29,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
     event UserClaimed(address indexed user, uint amount);
     event Burn(uint indexed amount);
 
-    uint24 private constant CLAIM_PERIOD = 1 seconds;
+    uint24 private constant CLAIM_PERIOD = 1 days;
     uint8 private constant MAX_PERIOD = 150;
     uint8 public percentageSlippage = 110;
 
