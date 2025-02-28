@@ -90,6 +90,9 @@ contract PoolManager is Ownable2Step {
         address newReserve1,
         address newReserve2
     ) external onlySecondary {
+        require(newReserve1 != address(0), 'Zero Address');
+        require(newReserve2 != address(0), 'Zero Address');
+
         reservePool = newReserve1;
         reservePool2 = newReserve2;
     }
