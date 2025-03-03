@@ -246,7 +246,7 @@ contract PoolManager is Ownable2Step {
             address(this),
             amountInMaximum
         );
-        IERC20(tokenIn).approve(address(address(swapRouter)), amountInMaximum);
+        IERC20(tokenIn).approve(address(swapRouter), amountInMaximum);
 
         params = ISwapRouter.ExactOutputSingleParams({
             tokenIn: tokenIn,
@@ -260,7 +260,14 @@ contract PoolManager is Ownable2Step {
         });
 
         amountIn = swapRouter.exactOutputSingle(params);
-        IERC20(tokenIn).safeTransfer(msg.sender, amountInMaximum - amountIn);
+        if (amountIn < amountInMaximum) {
+            IERC20(tokenIn).approve(address(swapRouter), 0);
+
+            IERC20(tokenIn).safeTransfer(
+                msg.sender,
+                amountInMaximum - amountIn
+            );
+        }
     }
 
     function increaseLiquidityPoolUniswap(

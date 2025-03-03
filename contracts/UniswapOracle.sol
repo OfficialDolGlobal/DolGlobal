@@ -54,7 +54,7 @@ contract UniswapOracle {
     function returnPrice(uint128 amountIn) external view returns (uint) {
         require(poolDolUsdt != address(0), 'DOL/USDT pool not set');
 
-        (int24 tickDolWbtc, ) = OracleLibrary.consult(poolDolUsdt, 30);
+        (int24 tickDolWbtc, ) = OracleLibrary.consult(poolDolUsdt, 180);
         uint amountOut = OracleLibrary.getQuoteAtTick(
             tickDolWbtc,
             amountIn,
