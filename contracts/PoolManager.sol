@@ -193,11 +193,8 @@ contract PoolManager is Ownable2Step {
         }
     }
 
-    function getAmountValue(
-        uint128 amount,
-        uint32 secondsAgo
-    ) external view returns (uint value) {
-        return oracle.returnPrice(amount, secondsAgo);
+    function getAmountValue(uint128 amount) external view returns (uint value) {
+        return oracle.returnPrice(amount);
     }
 
     function distributeUnilevelUsdt(address user, uint amount) external {

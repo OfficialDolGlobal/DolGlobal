@@ -359,10 +359,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         return (users[user][index].balance * daysElapsed) / MAX_PERIOD;
     }
 
-    function claimContribution(
-        uint index,
-        uint32 secondsAgo
-    ) external nonReentrant {
+    function claimContribution(uint index) external nonReentrant {
         require(
             poolManager.isFaceIdVerified(msg.sender),
             'User not verified face id'
@@ -386,7 +383,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
             'Minimum accumulated to claim is 10 dollars'
         );
         userTotalEarned[msg.sender] += totalValueInUSD;
-        uint currentPrice = poolManager.getAmountValue(1 ether, secondsAgo);
+        uint currentPrice = poolManager.getAmountValue(1 ether);
         uint totalTokensToSend = (totalValueInUSD * 1e18) / currentPrice;
         require(
             distributionBalance >= totalTokensToSend,

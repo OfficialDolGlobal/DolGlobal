@@ -9,7 +9,7 @@ contract UniswapOracle {
     address public owner;
     address public dolToken;
     address public usdt;
-
+    uint32 public secondsAgo;
     event OwnerChanged(address indexed previousOwner, address indexed newOwner);
 
     modifier onlyOwner() {
@@ -20,6 +20,10 @@ contract UniswapOracle {
     constructor() {
         owner = msg.sender;
         emit OwnerChanged(address(0), owner);
+    }
+
+    function setSecondsAgo(uint32 newSeconds) external onlyOwner {
+        secondsAgo = newSeconds;
     }
 
     function changeOwner(address newOwner) external onlyOwner {
@@ -51,11 +55,7 @@ contract UniswapOracle {
         poolDolUsdt = _pool;
     }
 
-    function returnPrice(
-        uint128 amountIn,
-        uint32 secondsAgo
-    ) external view returns (uint) {
-        require(secondsAgo >= 30, 'SecondsAgo too low');
+    function returnPrice(uint128 amountIn) external view returns (uint) {
         require(poolDolUsdt != address(0), 'DOL/USDT pool not set');
 
         (int24 tickDolWbtc, ) = OracleLibrary.consult(poolDolUsdt, secondsAgo);

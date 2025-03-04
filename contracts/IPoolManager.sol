@@ -2,10 +2,7 @@
 pragma solidity 0.8.28;
 
 interface IPoolManager {
-    function getAmountValue(
-        uint128 amount,
-        uint32 secondsAgo
-    ) external view returns (uint value);
+    function getAmountValue(uint128 amount) external view returns (uint value);
     function increaseLiquidityPool2(uint amount) external;
     function increaseLiquidityPool1(uint amount) external;
     function swap(
