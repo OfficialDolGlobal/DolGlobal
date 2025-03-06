@@ -55,6 +55,23 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         poolManager = IPoolManager(_poolManager);
     }
 
+    function isUserActive(address user) external view returns (bool) {
+        if (userTotalContributions[user] == 0) {
+            return false;
+        }
+        Donation.UserDonation memory donation = users[user][
+            userTotalContributions[user]
+        ];
+        if (
+            donation.startedTimestamp + CLAIM_PERIOD * MAX_PERIOD >=
+            block.timestamp
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     function addDistributionFunds(uint256 amount) external {
         token.safeTransferFrom(msg.sender, address(this), amount);
         distributionBalance += amount;
@@ -84,8 +101,8 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         if (userDonation.daysPaid + daysElapsed == MAX_PERIOD) {
             return 0;
         }
-        if (amount < 10e6) {
-            while (amount < 10e6) {
+        if (amount < 50e6) {
+            while (amount < 50e6) {
                 ++daysElapsed;
                 if (userDonation.daysPaid + daysElapsed == MAX_PERIOD) {
                     return
@@ -309,8 +326,8 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         if (userDonation.daysPaid + daysElapsed == MAX_PERIOD) {
             return (amount);
         }
-        if (amount < 10e6) {
-            while (amount < 10e6) {
+        if (amount < 50e6) {
+            while (amount < 50e6) {
                 ++daysElapsed;
                 amount = calculateValue(user, index, daysElapsed);
 
@@ -378,9 +395,9 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
             (users[msg.sender][index].daysPaid * CLAIM_PERIOD);
         uint totalValueInUSD = calculateValue(msg.sender, index, daysElapsed);
         require(
-            totalValueInUSD >= 10e6 ||
+            totalValueInUSD >= 50e6 ||
                 users[msg.sender][index].daysPaid == MAX_PERIOD,
-            'Minimum accumulated to claim is 10 dollars'
+            'Minimum accumulated to claim is 50 dollars'
         );
         userTotalEarned[msg.sender] += totalValueInUSD;
         uint currentPrice = poolManager.getAmountValue(1 ether);

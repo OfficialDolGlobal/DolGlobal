@@ -160,6 +160,10 @@ contract PoolManager is Ownable2Step {
         emit SetPoolLock(lockId);
     }
 
+    function isUserActive(address user) external view returns (bool) {
+        return treasuryPool.isUserActive(user);
+    }
+
     function collectUniswapFee() external {
         unicryptLocker.collect(
             lockPoolId,

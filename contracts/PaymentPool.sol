@@ -133,6 +133,15 @@ abstract contract PaymentPool is Ownable2Step, ReentrancyGuard {
         return balances;
     }
 
+    function isRecipient(address user) external view returns (bool) {
+        for (uint i = 0; i < recipients.length; i++) {
+            if (recipients[i] == user) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function addRecipient(
         address newRecipient,
         uint24 percentage

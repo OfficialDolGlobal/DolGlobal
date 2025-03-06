@@ -7,6 +7,7 @@ import '@openzeppelin/contracts/access/Ownable2Step.sol';
 import './IBurnable.sol';
 import '@uniswap/v3-periphery/contracts/interfaces/ISwapRouter.sol';
 import './IPoolManager.sol';
+import 'hardhat/console.sol';
 library Donation {
     struct UserDonation {
         uint id;
@@ -141,6 +142,24 @@ contract TreasuryPoolMocked is ReentrancyGuard, Ownable2Step {
         emit UserContributed(msg.sender, amount);
         token.burn(burnedAmount);
         poolManager.increaseLiquidityPool2(rechargedPool);
+    }
+
+    function isUserActive(address user) external view returns (bool) {
+        if (userTotalContributions[user] == 0) {
+            return false;
+        }
+        Donation.UserDonation memory donation = users[user][
+            userTotalContributions[user]
+        ];
+
+        if (
+            donation.startedTimestamp + CLAIM_PERIOD * MAX_PERIOD >=
+            block.timestamp
+        ) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     function getActiveContributions(
@@ -350,9 +369,9 @@ contract TreasuryPoolMocked is ReentrancyGuard, Ownable2Step {
             (users[msg.sender][index].daysPaid * CLAIM_PERIOD);
         uint totalValueInUSD = calculateValue(msg.sender, index, daysElapsed);
         require(
-            totalValueInUSD >= 10e6 ||
+            totalValueInUSD >= 50e6 ||
                 users[msg.sender][index].daysPaid == MAX_PERIOD,
-            'Minimum accumulated to claim is 10 dollars'
+            'Minimum accumulated to claim is 50 dollars'
         );
         userTotalEarned[msg.sender] += totalValueInUSD;
         // uint currentPrice = poolManager.getAmountValue(1 ether);

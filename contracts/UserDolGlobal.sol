@@ -189,9 +189,14 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
     }
 
     function setPoolManager(address _poolManager) external onlyOwner {
+        require(
+            address(poolManager) == address(0),
+            'Pool Manager is already set'
+        );
         poolManager = IPoolManager(_poolManager);
     }
     function setDolGlobalCollection(address _collection) external onlyOwner {
+        require(address(collection) == address(0), 'Collection is already set');
         collection = IDolGlobalCollection(_collection);
     }
 

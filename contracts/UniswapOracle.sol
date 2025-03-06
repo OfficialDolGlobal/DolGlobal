@@ -35,15 +35,19 @@ contract UniswapOracle {
 
     function setDol(address _dolToken) external onlyOwner {
         require(_dolToken != address(0), 'DOL cannot be the zero address');
+        require(dolToken == address(0), 'Token is already set');
         dolToken = _dolToken;
     }
 
     function setUsdt(address _usdt) external onlyOwner {
         require(_usdt != address(0), 'USDT cannot be the zero address');
+        require(usdt == address(0), 'Usdt is already set');
+
         usdt = _usdt;
     }
 
     function setPoolDolUsdt(uint24 _fee) external onlyOwner {
+        require(poolDolUsdt == address(0), 'Pool is already set');
         require(dolToken != address(0), 'DOL address not set');
         require(usdt != address(0), 'USDT address not set');
 

@@ -2,6 +2,7 @@
 pragma solidity 0.8.28;
 
 interface IPoolManager {
+    function isUserActive(address user) external view returns (bool);
     function getAmountValue(uint128 amount) external view returns (uint value);
     function increaseLiquidityPool2(uint amount) external;
     function increaseLiquidityPool1(uint amount) external;

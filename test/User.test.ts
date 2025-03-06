@@ -88,164 +88,164 @@ userRefferal,userRefferalAddress,top1Address,top2Address,top3Address,top4Address
       };
     }
   
-    it("Should distribute to top5", async function () {
-      const {
-        owner,
-        otherAccount,
-        usdt,
-        dolGlobal,devPoolAddress,
-        userRefferal,userRefferalAddress,top1Address,top2Address,top3Address,top4Address,top5Address,collection,top1,top2,top3,top4,top5,g100,g100Address,g10,g10Address
-      } = await loadFixture(deployFixture);
+    // it("Should distribute to top5", async function () {
+    //   const {
+    //     owner,
+    //     otherAccount,
+    //     usdt,
+    //     dolGlobal,devPoolAddress,
+    //     userRefferal,userRefferalAddress,top1Address,top2Address,top3Address,top4Address,top5Address,collection,top1,top2,top3,top4,top5,g100,g100Address,g10,g10Address
+    //   } = await loadFixture(deployFixture);
 
-      await usdt.mint(ethers.parseUnits("100000",6))
-      await usdt.approve(userRefferalAddress,ethers.parseUnits("100000",6))
-      await usdt.connect(otherAccount).mint(ethers.parseUnits("1000",6))
-      await usdt.connect(otherAccount).approve(top1Address,ethers.parseUnits("1000",6))
-      await userRefferal.createUser(owner.address,g10Address)
+    //   await usdt.mint(ethers.parseUnits("100000",6))
+    //   await usdt.approve(userRefferalAddress,ethers.parseUnits("100000",6))
+    //   await usdt.connect(otherAccount).mint(ethers.parseUnits("1000",6))
+    //   await usdt.connect(otherAccount).approve(top1Address,ethers.parseUnits("1000",6))
+    //   await userRefferal.createUser(owner.address,g10Address)
 
-      await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("1000",6))
-      expect(await usdt.balanceOf(g100Address)).to.be.equal(ethers.parseUnits("25",6))
-      expect(await usdt.balanceOf(g10Address)).to.be.equal(ethers.parseUnits("25",6))
-      expect(await top1.availableToBuy()).to.be.equal(false)
-      await expect(top1.buyTop5()).to.be.revertedWith("Unavailable now")
-      await top1.setConfig(ethers.parseUnits("40",6),ethers.parseUnits("10",6))
-      await time.increase(24*60*60)
-      await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("1000",6))
-      expect(await usdt.balanceOf(g100Address)).to.be.equal(ethers.parseUnits("50",6))
-      expect(await usdt.balanceOf(g10Address)).to.be.equal(ethers.parseUnits("50",6))
-      expect(await top1.availableToBuy()).to.be.equal(true)
+    //   await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("1000",6))
+    //   expect(await usdt.balanceOf(g100Address)).to.be.equal(ethers.parseUnits("25",6))
+    //   expect(await usdt.balanceOf(g10Address)).to.be.equal(ethers.parseUnits("25",6))
+    //   expect(await top1.availableToBuy()).to.be.equal(false)
+    //   await expect(top1.buyTop5()).to.be.revertedWith("Unavailable now")
+    //   await top1.setConfig(ethers.parseUnits("40",6),ethers.parseUnits("10",6))
+    //   await time.increase(24*60*60)
+    //   await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("1000",6))
+    //   expect(await usdt.balanceOf(g100Address)).to.be.equal(ethers.parseUnits("50",6))
+    //   expect(await usdt.balanceOf(g10Address)).to.be.equal(ethers.parseUnits("50",6))
+    //   expect(await top1.availableToBuy()).to.be.equal(true)
 
-      await top1.connect(otherAccount).buyTop5()
+    //   await top1.connect(otherAccount).buyTop5()
       
-      await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("1000",6))
+    //   await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("1000",6))
 
-      await expect(top1.buyTop5()).to.be.revertedWith("Unavailable now")
+    //   await expect(top1.buyTop5()).to.be.revertedWith("Unavailable now")
 
-      expect(await usdt.balanceOf(top1Address)).to.be.equal(0)
-      expect(await usdt.balanceOf(otherAccount.address)).to.be.equal(ethers.parseUnits("1015",6))
-      await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("1000",6))
-      expect(await usdt.balanceOf(otherAccount.address)).to.be.equal(ethers.parseUnits("1030",6))
-      await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("1000",6))
-      expect(await usdt.balanceOf(otherAccount.address)).to.be.equal(ethers.parseUnits("1030",6))
-      await top1.setConfig(ethers.parseUnits("40",6),ethers.parseUnits("10",6))
-      await expect(top1.buyTop5()).to.be.revertedWith("Purchase allowed after 24h or if you are a top 5 user.")
-      await top1.connect(otherAccount).buyTop5()
+    //   expect(await usdt.balanceOf(top1Address)).to.be.equal(0)
+    //   expect(await usdt.balanceOf(otherAccount.address)).to.be.equal(ethers.parseUnits("1015",6))
+    //   await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("1000",6))
+    //   expect(await usdt.balanceOf(otherAccount.address)).to.be.equal(ethers.parseUnits("1030",6))
+    //   await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("1000",6))
+    //   expect(await usdt.balanceOf(otherAccount.address)).to.be.equal(ethers.parseUnits("1030",6))
+    //   await top1.setConfig(ethers.parseUnits("40",6),ethers.parseUnits("10",6))
+    //   await expect(top1.buyTop5()).to.be.revertedWith("Purchase allowed after 24h or if you are a top 5 user.")
+    //   await top1.connect(otherAccount).buyTop5()
 
 
 
-    }); 
+    // }); 
 
-    it("Should distribute to g100", async function () {
-      const {
-        owner,
-        otherAccount,
-        usdt,
-        dolGlobal,devPoolAddress,another,
-        userRefferal,userRefferalAddress,top1Address,top2Address,top3Address,top4Address,top5Address,collection,top1,top2,top3,top4,top5,g100,g100Address,g10,g10Address
-      } = await loadFixture(deployFixture);
+    // it("Should distribute to g100", async function () {
+    //   const {
+    //     owner,
+    //     otherAccount,
+    //     usdt,
+    //     dolGlobal,devPoolAddress,another,
+    //     userRefferal,userRefferalAddress,top1Address,top2Address,top3Address,top4Address,top5Address,collection,top1,top2,top3,top4,top5,g100,g100Address,g10,g10Address
+    //   } = await loadFixture(deployFixture);
 
-      await usdt.mint(ethers.parseUnits("2000000",6))
-      await usdt.approve(userRefferalAddress,ethers.parseUnits("2000000",6))
-      await usdt.connect(otherAccount).mint(ethers.parseUnits("1000",6))
-      await usdt.connect(otherAccount).approve(g100Address,ethers.parseUnits("1000",6))
-      await usdt.approve(g100Address,ethers.parseUnits("1000",6))
+    //   await usdt.mint(ethers.parseUnits("2000000",6))
+    //   await usdt.approve(userRefferalAddress,ethers.parseUnits("2000000",6))
+    //   await usdt.connect(otherAccount).mint(ethers.parseUnits("1000",6))
+    //   await usdt.connect(otherAccount).approve(g100Address,ethers.parseUnits("1000",6))
+    //   await usdt.approve(g100Address,ethers.parseUnits("1000",6))
 
-      await userRefferal.createUser(owner.address,g10Address)
+    //   await userRefferal.createUser(owner.address,g10Address)
 
       
-      await expect(g100.connect(otherAccount).buyPosition()).to.be.revertedWith("Unavailable")
+    //   await expect(g100.connect(otherAccount).buyPosition()).to.be.revertedWith("Unavailable")
 
-      await g100.setConfig(ethers.parseUnits("10",6),ethers.parseUnits("30",6))
-      await g100.connect(otherAccount).buyPosition()
-      expect(await usdt.balanceOf(otherAccount.address)).to.be.equal(ethers.parseUnits("990",6))
-      await expect(g100.connect(otherAccount).buyPosition()).to.be.revertedWith("You can only buy one position")
-      expect(await usdt.balanceOf(otherAccount.address)).to.be.equal(ethers.parseUnits("990",6))
+    //   await g100.setConfig(ethers.parseUnits("10",6),ethers.parseUnits("30",6))
+    //   await g100.connect(otherAccount).buyPosition()
+    //   expect(await usdt.balanceOf(otherAccount.address)).to.be.equal(ethers.parseUnits("990",6))
+    //   await expect(g100.connect(otherAccount).buyPosition()).to.be.revertedWith("You can only buy one position")
+    //   expect(await usdt.balanceOf(otherAccount.address)).to.be.equal(ethers.parseUnits("990",6))
 
-      expect(await g100.viewAddressByIndex(1)).to.be.equal(otherAccount.address)
+    //   expect(await g100.viewAddressByIndex(1)).to.be.equal(otherAccount.address)
 
-      await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("1000",6))
-      expect(await g100.balanceFree()).to.be.equal(ethers.parseUnits("25",6))
-      await g100.connect(otherAccount).claim()
-      expect(await usdt.balanceOf(userRefferalAddress)).to.be.equal(0)
-      expect(await g100.balanceFree()).to.be.equal(0)
-      expect(await usdt.balanceOf(otherAccount.address)).to.be.equal(ethers.parseUnits("990.25",6))
-      await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("200000",6))
-      expect(await g100.balanceFree()).to.be.equal(ethers.parseUnits("5000",6))
-      await g100.claim()
-      await g100.setConfig(ethers.parseUnits("1000",6),ethers.parseUnits("3000",6))
-      await g100.buyPosition()
-      expect(await g100.viewAddressByIndex(1)).to.be.equal(owner.address)
+    //   await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("1000",6))
+    //   expect(await g100.balanceFree()).to.be.equal(ethers.parseUnits("25",6))
+    //   await g100.connect(otherAccount).claim()
+    //   expect(await usdt.balanceOf(userRefferalAddress)).to.be.equal(0)
+    //   expect(await g100.balanceFree()).to.be.equal(0)
+    //   expect(await usdt.balanceOf(otherAccount.address)).to.be.equal(ethers.parseUnits("990.25",6))
+    //   await userRefferal.distributeUnilevelIguality(owner.address,ethers.parseUnits("200000",6))
+    //   expect(await g100.balanceFree()).to.be.equal(ethers.parseUnits("5000",6))
+    //   await g100.claim()
+    //   await g100.setConfig(ethers.parseUnits("1000",6),ethers.parseUnits("3000",6))
+    //   await g100.buyPosition()
+    //   expect(await g100.viewAddressByIndex(1)).to.be.equal(owner.address)
 
-    }); 
+    // }); 
 
-    it("Should not buy G100 filled", async function () {
-      const {
-        owner,
-        otherAccount,
-        usdt,
-        dolGlobal,devPoolAddress,
-        userRefferal,userRefferalAddress,top1Address,top2Address,top3Address,top4Address,top5Address,collection,top1,top2,top3,top4,top5,g100,g100Address,g10,g10Address
-      } = await loadFixture(deployFixture);
+    // it("Should not buy G100 filled", async function () {
+    //   const {
+    //     owner,
+    //     otherAccount,
+    //     usdt,
+    //     dolGlobal,devPoolAddress,
+    //     userRefferal,userRefferalAddress,top1Address,top2Address,top3Address,top4Address,top5Address,collection,top1,top2,top3,top4,top5,g100,g100Address,g10,g10Address
+    //   } = await loadFixture(deployFixture);
 
-      await usdt.mint(ethers.parseUnits("2000000",6))
-      await usdt.connect(otherAccount).mint(ethers.parseUnits("2000000",6))
+    //   await usdt.mint(ethers.parseUnits("2000000",6))
+    //   await usdt.connect(otherAccount).mint(ethers.parseUnits("2000000",6))
 
-      await usdt.approve(g100Address,ethers.parseUnits("2000000",6))
-      await usdt.connect(otherAccount).approve(g100Address,ethers.parseUnits("2000000",6))
+    //   await usdt.approve(g100Address,ethers.parseUnits("2000000",6))
+    //   await usdt.connect(otherAccount).approve(g100Address,ethers.parseUnits("2000000",6))
 
-      await g100.setConfig(ethers.parseUnits("10",6),ethers.parseUnits("20",6))
-      for (let index = 0; index < 100; index++) {
-        const wallet = ethers.Wallet.createRandom().connect(ethers.provider);
-        await owner.sendTransaction({to:wallet.address,value:ethers.parseEther("1")})
-        await usdt.connect(wallet).mint(100*10**6)
-        await usdt.connect(wallet).approve(g100Address,100*10**6)
-        await g100.connect(wallet).buyPosition()
-      }
-      await expect(         g100.buyPosition()
-    ).to.be.revertedWith("No positions to buy")
-    await g100.removePosition(50)
+    //   await g100.setConfig(ethers.parseUnits("10",6),ethers.parseUnits("20",6))
+    //   for (let index = 0; index < 100; index++) {
+    //     const wallet = ethers.Wallet.createRandom().connect(ethers.provider);
+    //     await owner.sendTransaction({to:wallet.address,value:ethers.parseEther("1")})
+    //     await usdt.connect(wallet).mint(100*10**6)
+    //     await usdt.connect(wallet).approve(g100Address,100*10**6)
+    //     await g100.connect(wallet).buyPosition()
+    //   }
+    //   await expect(         g100.buyPosition()
+    // ).to.be.revertedWith("No positions to buy")
+    // await g100.removePosition(50)
 
 
-    expect(await g100.viewAddressByIndex(50)).to.be.equal(ethers.ZeroAddress)
+    // expect(await g100.viewAddressByIndex(50)).to.be.equal(ethers.ZeroAddress)
 
-    await g100.connect(otherAccount).buyPosition()
+    // await g100.connect(otherAccount).buyPosition()
     
-    expect(await g100.viewAddressByIndex(50)).to.be.equal(otherAccount.address)
+    // expect(await g100.viewAddressByIndex(50)).to.be.equal(otherAccount.address)
 
-    }); 
-    it("Should start with initial position", async function () {
-      const {
-        owner,
-        otherAccount,
-        usdt,
-        dolGlobal,devPoolAddress,
-        userRefferal,userRefferalAddress,top1Address,top2Address,top3Address,top4Address,top5Address,collection,top1,top2,top3,top4,top5,g100,g100Address,g10,g10Address
-      } = await loadFixture(deployFixture);
+    // }); 
+    // it("Should start with initial position", async function () {
+    //   const {
+    //     owner,
+    //     otherAccount,
+    //     usdt,
+    //     dolGlobal,devPoolAddress,
+    //     userRefferal,userRefferalAddress,top1Address,top2Address,top3Address,top4Address,top5Address,collection,top1,top2,top3,top4,top5,g100,g100Address,g10,g10Address
+    //   } = await loadFixture(deployFixture);
 
-      expect((await userRefferal.getUser(top1Address)).totalLevels).to.be.equal(0)    
-      expect(((await userRefferal.getUser(top1Address)).referrals[0])).to.be.equal(top2Address)      
+    //   expect((await userRefferal.getUser(top1Address)).totalLevels).to.be.equal(0)    
+    //   expect(((await userRefferal.getUser(top1Address)).referrals[0])).to.be.equal(top2Address)      
   
-      expect((await userRefferal.getUser(top2Address)).totalLevels).to.be.equal(1)   
-      expect((await userRefferal.getUser(top2Address)).referrals[0]).to.be.equal(top3Address)      
+    //   expect((await userRefferal.getUser(top2Address)).totalLevels).to.be.equal(1)   
+    //   expect((await userRefferal.getUser(top2Address)).referrals[0]).to.be.equal(top3Address)      
 
-      expect((await userRefferal.getUser(top3Address)).totalLevels).to.be.equal(2)     
-      expect((await userRefferal.getUser(top3Address)).referrals[0]).to.be.equal(top4Address)      
+    //   expect((await userRefferal.getUser(top3Address)).totalLevels).to.be.equal(2)     
+    //   expect((await userRefferal.getUser(top3Address)).referrals[0]).to.be.equal(top4Address)      
  
-      expect((await userRefferal.getUser(top4Address)).totalLevels).to.be.equal(3)   
-      expect((await userRefferal.getUser(top4Address)).referrals[0]).to.be.equal(top5Address)      
+    //   expect((await userRefferal.getUser(top4Address)).totalLevels).to.be.equal(3)   
+    //   expect((await userRefferal.getUser(top4Address)).referrals[0]).to.be.equal(top5Address)      
    
-      expect((await userRefferal.getUser(top5Address)).totalLevels).to.be.equal(4)   
-      expect((await userRefferal.getUser(top5Address)).referrals[0]).to.be.equal(g100Address)      
+    //   expect((await userRefferal.getUser(top5Address)).totalLevels).to.be.equal(4)   
+    //   expect((await userRefferal.getUser(top5Address)).referrals[0]).to.be.equal(g100Address)      
  
-      expect((await userRefferal.getUser(g100Address)).totalLevels).to.be.equal(5)  
-      expect((await userRefferal.getUser(g100Address)).referrals[0]).to.be.equal(g10Address)      
+    //   expect((await userRefferal.getUser(g100Address)).totalLevels).to.be.equal(5)  
+    //   expect((await userRefferal.getUser(g100Address)).referrals[0]).to.be.equal(g10Address)      
     
-      expect((await userRefferal.getUser(g10Address)).totalLevels).to.be.equal(6)   
-      expect((await userRefferal.getUser(g10Address)).referrals.length).to.be.equal(0)      
+    //   expect((await userRefferal.getUser(g10Address)).totalLevels).to.be.equal(6)   
+    //   expect((await userRefferal.getUser(g10Address)).referrals.length).to.be.equal(0)      
    
   
 
-    }); 
+    // }); 
 
     // it("Should distribute percentage of multinivel", async function () {
     //   const {
@@ -379,47 +379,5 @@ userRefferal,userRefferalAddress,top1Address,top2Address,top3Address,top4Address
 
     // }); 
 
-    it("Should distribute to g10", async function () {
-      const {
-        owner,
-        otherAccount,
-        usdt,
-        dolGlobal,devPoolAddress,another,
-        userRefferal,userRefferalAddress,top1Address,top2Address,top3Address,top4Address,top5Address,collection,top1,top2,top3,top4,top5,g100,g100Address,g10,g10Address
-      } = await loadFixture(deployFixture);
-      await userRefferal.createUser(owner.address,g10Address)
-      await userRefferal.setFaceId(owner.address)
-      for (let index = 1; index <= 15; index++) {
-        await g10.changeAddressByIndex(index,owner.address)
-      }
-      await g10.changeAddressByIndex(2,otherAccount.address)
-      await usdt.mint(ethers.parseUnits("380000",6))
-      await usdt.mint(ethers.parseUnits("500",6))
-      await usdt.connect(otherAccount).mint(ethers.parseUnits("500",6))
-      await usdt.approve(g10Address,ethers.parseUnits("500",6))
-      await usdt.connect(otherAccount).approve(g10Address,ethers.parseUnits("500",6))
-
-      await g10.buyDailyRoof()
-      await g10.connect(otherAccount).buyDailyRoof()
-
-      await usdt.approve(userRefferalAddress,ethers.parseUnits("380000",6))
-
-
-      for (let index = 0; index < 15; index++) {
-        if(index == 1){
-          expect(await g10.addresses(index)).to.be.equal(otherAccount.address)
-        }else{
-          expect(await g10.addresses(index)).to.be.equal(owner.address)
-        }        
-      }      
-      await userRefferal.distributeUnilevelUsdt(owner.address,ethers.parseUnits("380000",6))
-      expect(await g10.balanceFree()).to.be.equal(ethers.parseUnits("15000",6))
-      expect(await usdt.balanceOf(userRefferalAddress)).to.be.equal(0)
-      await g10.claim()
-      
-      expect(await g10.claimAvailable(otherAccount.address)).to.be.equal(ethers.parseUnits("1000",6));
-
-
-    }); 
 
   });

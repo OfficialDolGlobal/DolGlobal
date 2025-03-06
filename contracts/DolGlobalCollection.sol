@@ -54,6 +54,7 @@ contract DolGlobalCollection is
             poolManager.isFaceIdVerified(msg.sender),
             'User not verified face id'
         );
+        require(poolManager.isUserActive(msg.sender), 'Inactive');
         require(amount >= 10e6, 'Minimum required is 10 USDT');
 
         if (users[msg.sender].maxUnilevel == 0) {
@@ -82,7 +83,7 @@ contract DolGlobalCollection is
         dol.approve(address(poolManager), amountOut);
 
         uint rechargeAmount = (amountOut * 2) / 3;
-        uint uniswapLiquidityAmount = (amountOut * 1) / 3;
+        uint uniswapLiquidityAmount = amountOut - ((amountOut * 2) / 3);
 
         poolManager.increaseLiquidityPool2(rechargeAmount);
         poolManager.increaseLiquidityPoolUniswap(
