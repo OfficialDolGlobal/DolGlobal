@@ -9,6 +9,7 @@ import './IDolGlobalCollection.sol';
 import './IPoolManager.sol';
 import './ITop5.sol';
 import './ITopG.sol';
+import 'hardhat/console.sol';
 
 struct UserStruct {
     bool registered;
@@ -246,35 +247,27 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
         uint amount
     ) external nonReentrant {
         usdt.safeTransferFrom(msg.sender, address(this), amount);
-        amount = (amount * 100) / 38;
+        amount = (amount * 100) / 25;
         uint excess;
         uint totalLevels = users[user].totalLevels;
         address[40] memory levels = (users[user].levels);
 
         if (users[user].totalLevels == 0) {
-            excess = (amount * 38) / 100;
+            excess = (amount * 25) / 100;
         } else if (totalLevels == 1) {
-            excess = (amount * 28) / 100;
-        } else if (totalLevels == 2) {
-            excess = (amount * 23) / 100;
-        } else if (totalLevels == 3) {
-            excess = (amount * 21) / 100;
-        } else if (totalLevels == 4) {
-            excess = (amount * 19) / 100;
-        } else if (totalLevels == 5) {
-            excess = (amount * 18) / 100;
-        } else if (totalLevels == 6) {
-            excess = (amount * 17) / 100;
-        } else if (totalLevels > 6) {
-            excess = (((40 - totalLevels) * amount) * 5) / 1000;
+            excess = (amount * 156) / 1000;
+        } else if (totalLevels > 1) {
+            excess = (((40 - totalLevels) * amount) * 4) / 1000;
         }
+
         for (uint8 i = 0; i < totalLevels; i++) {
             uint percentage;
-            if (i < 7) {
-                percentage = calculateUnilevelUsdt(i + 1);
+            if (i == 0) {
+                percentage = calculateUnilevelUsdt(1);
             } else {
-                percentage = calculateUnilevelUsdt(7);
+                percentage = calculateUnilevelUsdt(i + 1);
             }
+
             if (blacklisted[levels[i]]) {
                 excess += (amount * percentage) / 1000;
                 userTotalLosted[levels[i]] += (amount * percentage) / 1000;
@@ -668,13 +661,7 @@ contract UserDolGlobal is Ownable2Step, ReentrancyGuard {
     }
 
     function calculateUnilevelUsdt(uint level) internal pure returns (uint) {
-        if (level == 1) return 100;
-        else if (level == 2) return 50;
-        else if (level == 3) return 20;
-        else if (level == 4) return 20;
-        else if (level == 5) return 10;
-        else if (level == 6) return 10;
-        else if (level == 7) return 5;
-        else return 5;
+        if (level == 1) return 94;
+        else return 4;
     }
 }

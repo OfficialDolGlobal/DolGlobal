@@ -135,7 +135,7 @@ contract TreasuryPoolMocked is ReentrancyGuard, Ownable2Step {
         //     (amount * 6) / 100,
         //     ((amountToken * 23076) / 100000)
         // );
-        poolManager.distributeUnilevelUsdt(msg.sender, (amount * 38) / 100);
+        poolManager.distributeUnilevelUsdt(msg.sender, (amount * 25) / 100);
 
         emit Burn(burnedAmount);
 

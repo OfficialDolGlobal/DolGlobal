@@ -9,7 +9,7 @@ contract UniswapOracle {
     address public owner;
     address public dolToken;
     address public usdt;
-    uint32 public secondsAgo;
+    uint32 public secondsAgo = 30;
     event OwnerChanged(address indexed previousOwner, address indexed newOwner);
 
     modifier onlyOwner() {
@@ -62,9 +62,9 @@ contract UniswapOracle {
     function returnPrice(uint128 amountIn) external view returns (uint) {
         require(poolDolUsdt != address(0), 'DOL/USDT pool not set');
 
-        (int24 tickDolWbtc, ) = OracleLibrary.consult(poolDolUsdt, secondsAgo);
+        (int24 tickDolUsdt, ) = OracleLibrary.consult(poolDolUsdt, secondsAgo);
         uint amountOut = OracleLibrary.getQuoteAtTick(
-            tickDolWbtc,
+            tickDolUsdt,
             amountIn,
             dolToken,
             usdt

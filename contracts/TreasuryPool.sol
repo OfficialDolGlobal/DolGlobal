@@ -150,19 +150,19 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
             address(usdt),
             address(token),
             10000,
-            (amount * 26) / 100,
+            (amount * 325) / 1000,
             address(this)
         );
 
-        burnedAmount = ((amountToken * 3846) / 10000);
-        rechargedPool = ((amountToken * 3846) / 10000);
+        burnedAmount = ((amountToken * 3076) / 10000);
+        rechargedPool = ((amountToken * 3076) / 10000);
 
         token.approve(address(poolManager), amountToken);
         poolManager.increaseLiquidityPoolUniswap(
-            (amount * 6) / 100,
-            ((amountToken * 2308) / 10000)
+            (amount * 125) / 1000,
+            ((amountToken * 3848) / 10000)
         );
-        poolManager.distributeUnilevelUsdt(msg.sender, (amount * 38) / 100);
+        poolManager.distributeUnilevelUsdt(msg.sender, (amount * 25) / 100);
 
         emit Burn(burnedAmount);
 
