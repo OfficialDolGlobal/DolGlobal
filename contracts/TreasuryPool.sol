@@ -63,7 +63,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
             userTotalContributions[user]
         ];
         if (
-            donation.startedTimestamp + CLAIM_PERIOD * MAX_PERIOD >=
+            donation.startedTimestamp + CLAIM_PERIOD * MAX_PERIOD >
             block.timestamp
         ) {
             return true;
@@ -101,8 +101,13 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         if (userDonation.daysPaid + daysElapsed == MAX_PERIOD) {
             return 0;
         }
-        if (amount < 50e6) {
-            while (amount < 50e6) {
+        uint balance = users[msg.sender][index].deposit;
+        uint roof = 10e6;
+        if (balance >= 1000e6) {
+            roof = balance / 10;
+        }
+        if (amount < roof) {
+            while (amount < roof) {
                 ++daysElapsed;
                 if (userDonation.daysPaid + daysElapsed == MAX_PERIOD) {
                     return
@@ -326,8 +331,13 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         if (userDonation.daysPaid + daysElapsed == MAX_PERIOD) {
             return (amount);
         }
-        if (amount < 50e6) {
-            while (amount < 50e6) {
+        uint roof = 10e6;
+        uint balance = users[msg.sender][index].deposit;
+        if (balance >= 1000e6) {
+            roof = balance / 10;
+        }
+        if (amount < roof) {
+            while (amount < roof) {
                 ++daysElapsed;
                 amount = calculateValue(user, index, daysElapsed);
 
@@ -394,11 +404,21 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
             users[msg.sender][index].startedTimestamp +
             (users[msg.sender][index].daysPaid * CLAIM_PERIOD);
         uint totalValueInUSD = calculateValue(msg.sender, index, daysElapsed);
-        require(
-            totalValueInUSD >= 50e6 ||
-                users[msg.sender][index].daysPaid == MAX_PERIOD,
-            'Minimum accumulated to claim is 50 dollars'
-        );
+        uint balance = users[msg.sender][index].deposit;
+        if (balance >= 1000e6) {
+            require(
+                totalValueInUSD >= balance / 10 ||
+                    users[msg.sender][index].daysPaid == MAX_PERIOD,
+                'Minimum accumulated to claim is 10% of participation'
+            );
+        } else {
+            require(
+                totalValueInUSD >= 10e6 ||
+                    users[msg.sender][index].daysPaid == MAX_PERIOD,
+                'Minimum accumulated to claim is 10 dollars'
+            );
+        }
+
         userTotalEarned[msg.sender] += totalValueInUSD;
         uint currentPrice = poolManager.getAmountValue(1 ether);
         uint totalTokensToSend = (totalValueInUSD * 1e18) / currentPrice;
@@ -425,7 +445,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         users[msg.sender][index].claims.push((totalTokensToSend));
         users[msg.sender][index].claimPrice.push((currentPrice));
         users[msg.sender][index].claimsTimestamp.push(block.timestamp);
-        uint fee = totalValueInUSD / 100;
+        uint fee = totalValueInUSD / 20;
         usdt.approve(address(poolManager), fee);
         poolManager.increaseLiquidityDevPool(fee, address(usdt));
         usdt.safeTransfer(msg.sender, (totalValueInUSD - fee));

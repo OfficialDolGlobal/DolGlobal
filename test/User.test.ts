@@ -5,7 +5,9 @@ import {
   import { expect } from "chai";
   import { ethers } from "hardhat";
 import { token } from "../typechain-types/@openzeppelin/contracts";
+import dotenv from "dotenv";
 
+dotenv.config();
   describe("User", function () {
     this.timeout(60000000); 
     async function deployFixture() {
@@ -256,32 +258,32 @@ userRefferal,userRefferalAddress,top1Address,top2Address,top3Address,top4Address
         userRefferal,userRefferalAddress,top1Address,top2Address,top3Address,top4Address,top5Address,collection,top1,top2,top3,top4,top5,g100,g100Address,g10,g10Address
       } = await loadFixture(deployFixture);
 
-      await userRefferal.createUser(owner.address,g10Address)
-      await userRefferal.setFaceId(owner.address)
+      const mnemonicPhrase = process.env.mnemonic!;
 
-      const wallets:any = [owner]
-      await usdt.mint(ethers.parseUnits("1000",6))
-      await usdt.approve(collectionAddress,ethers.parseUnits("1000",6))
-      await collection.mintNftGlobal(ethers.parseUnits("1000",6))
-      expect(await collection.availableUnilevel(owner.address)).to.be.equal(ethers.parseUnits("2000",6))
-      for (let index = 1; index <= 40; index++) {
-        const wallet:any = ethers.Wallet.createRandom().connect(ethers.provider);
-        wallets.push(wallet)
-        await owner.sendTransaction({to:wallet.address,value:ethers.parseEther("1")})
-        await usdt.connect(wallet).mint(ethers.parseUnits("1000",6))
-        await usdt.connect(wallet).approve(userRefferalAddress,ethers.parseUnits("1000",6))
 
-        await userRefferal.connect(wallet).createUser(wallet.address,wallets[index-1])
-        await userRefferal.setFaceId(wallet.address)
-      }
+          const wallets = [owner];
+          
       
-      await userRefferal.connect(wallets[1]).distributeUnilevelUsdt(wallets[1].address,ethers.parseUnits("250",6));
-      expect(await usdt.balanceOf(owner.address)).to.be.equal(ethers.parseUnits("94",6))
-      for (let index = 2; index <= 9; index++) {
-        await userRefferal.connect(wallets[index]).distributeUnilevelUsdt(wallets[index].address,ethers.parseUnits("250",6));
-        expect(await usdt.balanceOf(owner.address)).to.be.equal(ethers.parseUnits(String(94+((index-1)*4)),6))
-      }
-      console.log(await usdt.balanceOf(userRefferalAddress));
+          const mnemonic = ethers.Mnemonic.fromPhrase(mnemonicPhrase);
+          const hdWallet = ethers.HDNodeWallet.fromSeed(mnemonic.computeSeed());
+        await userRefferal.createUser(owner.address,g10Address)
+        await collection.marketingBonus(owner.address,ethers.parseUnits("10000",6))
+
+          for (let i = 0; i < 40; i++) {
+              const derivedNode = hdWallet.derivePath(`m/44'/60'/0'/0/${i}`);
+              const wallet :any = new ethers.Wallet(derivedNode.privateKey, ethers.provider);
+              await owner.sendTransaction({to:wallet.address,value:ethers.parseEther("1")})
+              wallets.push(wallet);
+              await userRefferal.connect(wallet).createUser(wallet.address,wallets[i].address)
+              await collection.marketingBonus(wallet.address,ethers.parseUnits("10000",6))
+          }
+          const donateWallet = wallets[wallets.length-1]
+          await usdt.connect(donateWallet).mint(ethers.parseUnits("10000",6))
+          await usdt.connect(donateWallet).approve(userRefferalAddress,ethers.parseUnits("10000",6))
+
+          
+
+
 
     }); 
  

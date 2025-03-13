@@ -122,112 +122,7 @@ import { token } from "../typechain-types/@openzeppelin/contracts";
       };
     }
   
-    // it("Should create donation usdt", async function () {
-    //   const {
-    //     owner,
-    //     otherAccount,
-    //     treasuryPool,
-    //     dolGlobal,
-    //     treasuryPoolAddress,
-    //     usdt,
-    //     balance,
-    //     poolManager,
-    //     rechargePool,userRefferalAddress,userRefferal,g10Address
-    //   } = await loadFixture(deployFixture);
-    //   expect(await dolGlobal.balanceOf(treasuryPoolAddress)).to.be.equal(ethers.parseUnits("49500000", "ether"))
-    //   expect(await treasuryPool.distributionBalance()).to.be.equal(ethers.parseUnits("49500000", "ether"))
-
-    //   await usdt.approve(treasuryPoolAddress,2000*10**6)
-    //   expect(await rechargePool.getTotalTokens()).to.be.equal(0)
-    //   await treasuryPool.contribute(1000*10**6)
-
-      
-    //   expect(await rechargePool.getTotalTokens()).to.be.equal(ethers.parseUnits("49.998"))
-    //   await expect(treasuryPool.contribute(5*10**6)).to.be.revertedWith("Amount must be greater than 10 dollars")
-
-    //   expect((await treasuryPool.getUser(owner.address,1)).balance).to.be.equal(2500*10**6);
-    //   expect((await treasuryPool.getUser(owner.address,1)).deposit).to.be.equal(1000*10**6);
-    //   await time.increase(60*60)
-    //   expect(await treasuryPool.calculateDaysElapsedToClaim(owner.address,1)).to.be.equal(0)
-    //   await time.increase(24*60*60)
-    //   expect(await treasuryPool.timeUntilNextWithdrawal(owner.address,1)).to.be.equal(0)
-    //   expect(await treasuryPool.calculateDaysElapsedToClaim(owner.address,1)).to.be.equal(1)
-    //   expect((await treasuryPool.getUser(owner.address,1)).daysPaid).to.be.equal(0)
-    //   await treasuryPool.claimContribution(1)
-
-    //   await expect(treasuryPool.claimContribution(1)).to.be.revertedWith("Tokens are still locked")
-    //   expect((await treasuryPool.getUser(owner.address,1)).daysPaid).to.be.equal(1)
-
-    //   expect(await treasuryPool.calculateDaysElapsedToClaim(owner.address,1)).to.be.equal(0)
-    //   await time.increase(10*24*60*60)
-    //   expect(await treasuryPool.calculateDaysElapsedToClaim(owner.address,1)).to.be.equal(10)
-    //   expect(await treasuryPool.timeUntilNextWithdrawal(owner.address,1)).to.be.equal(0)
-    //   await treasuryPool.claimContribution(1)
-
-    //   expect((await treasuryPool.getUser(owner.address,1)).daysPaid).to.be.equal(11)
-    //   await time.increase(200*24*60*60)
-    //   const claim = await treasuryPool.previewClaim(owner.address,1)
-    //   expect(claim[0]).to.be.equal(2316666666n);
-      
-    //   await treasuryPool.claimContribution(1)
-    //   expect((await treasuryPool.getUser(owner.address,1)).daysPaid).to.be.equal(150)
-
-    //   await time.increase(200*24*60*60)
-    //   await expect(treasuryPool.claimContribution(1)).to.be.revertedWith("Already claimed")
-
-
-    //   const tx = await treasuryPool.contribute(10*10**6)
-      
-    //   expect(await treasuryPool.userTotalContributions(owner.address)).to.be.equal(2)
-    //   await time.increase(10*24*60*60)
-    //   await expect(treasuryPool.claimContribution(2)).to.be.revertedWith("Minimum accumulated to claim is 10 dollars")    
-    //   await time.increase(130*24*60*60)
-    //   await treasuryPool.claimContribution(2)
-    //   await time.increase(12*24*60*60)
-
-    //   await treasuryPool.claimContribution(2)
-    //   expect(await treasuryPool.userTotalEarned(owner.address)).to.be.equal(2524999997n);
-    //   await usdt.connect(otherAccount).mint(100*10**6)
-    //   await usdt.connect(otherAccount).approve(treasuryPoolAddress,100*10**6)
-    //   // await expect(treasuryPool.connect(otherAccount).contribute(100*10**6)).to.be.revertedWith("User not verified face id")
-      
-      
-    // }); 
-    // it("Should create donation usdt", async function () {
-    //   const {
-    //     owner,
-    //     otherAccount,
-    //     treasuryPool,
-    //     dolGlobal,
-    //     treasuryPoolAddress,
-    //     usdt,
-    //     balance,
-    //     poolManager,
-    //     rechargePool,userRefferalAddress
-    //   } = await loadFixture(deployFixture);
-    //   expect(await dolGlobal.balanceOf(treasuryPoolAddress)).to.be.equal(ethers.parseUnits("49500000", "ether"))
-    //   expect(await treasuryPool.distributionBalance()).to.be.equal(ethers.parseUnits("49500000", "ether"))
-      
-    //   await usdt.approve(treasuryPoolAddress,200000*10**6)
-    //   expect(await rechargePool.getTotalTokens()).to.be.equal(0)
-      
-    //   await treasuryPool.contribute(1000*10**6)
-    //   await time.increase(69*24*60*60)
-    //   await treasuryPool.claimContribution(1)
-    //   console.log(await treasuryPool.timeUntilNextWithdrawal(owner.address,1));
-    //   await time.increase(24*60*60*1000)
-    //   console.log(await treasuryPool.timeUntilNextWithdrawal(owner.address,1));
-
-
-      
-
-  
-
-
-      
-    // }); 
-
-    it("Should create donation with unilevel", async function () {
+    it("Should create donation usdt", async function () {
       const {
         owner,
         otherAccount,
@@ -237,31 +132,106 @@ import { token } from "../typechain-types/@openzeppelin/contracts";
         usdt,
         balance,
         poolManager,
-        rechargePool,
-        userRefferalAddress,
-        userRefferal,collection,collectionAddress,rechargePoolAddress
+        rechargePool,userRefferalAddress,userRefferal,g10Address
       } = await loadFixture(deployFixture);
-      const wallets = [];
-      wallets.push(owner)
-      for (let index = 1; index <= 41; index++) {
-        const wallet = ethers.Wallet.createRandom().connect(ethers.provider);
-        wallets.push(wallet)
-        await owner.sendTransaction({to:wallet.address,value:ethers.parseEther("1")})
-        await userRefferal.connect(wallet).createUser(wallet.address,wallets[index-1])
-        await collection.marketingBonus(wallet.address,100*10**6)
-        await userRefferal.setFaceId(wallet.address)
-      }
-      await usdt.connect(wallets[wallets.length-1]).mint(100*10**6)
-      await usdt.connect(wallets[wallets.length-1]).approve(collectionAddress,100*10**6)
+      expect(await dolGlobal.balanceOf(treasuryPoolAddress)).to.be.equal(ethers.parseUnits("49500000", "ether"))
+      expect(await treasuryPool.distributionBalance()).to.be.equal(ethers.parseUnits("49500000", "ether"))
+
+      await usdt.approve(treasuryPoolAddress,2000*10**6)
+      expect(await rechargePool.getTotalTokens()).to.be.equal(0)
+      await treasuryPool.contribute(1000*10**6)
+
+      console.log(await treasuryPool.timeUntilNextWithdrawal(owner.address,1));
+      const days = 6*24*60*60;
+      expect(await treasuryPool.timeUntilNextWithdrawal(owner.address,1)).to.be.equal(days)
       
-        await collection.connect(wallets[wallets.length-1]).mintNftGlobal(100*10**6)   
-        for (let index = 1; index < wallets.length; index++) {
-          console.log("Nível: #"+String(wallets.length-index-1)," Ganho: "+ethers.formatUnits(await usdt.balanceOf(wallets[index].address),6));
-          
-        }
-          
+      expect(await rechargePool.getTotalTokens()).to.be.equal(ethers.parseUnits("49.998"))
+      await expect(treasuryPool.contribute(5*10**6)).to.be.revertedWith("Amount must be greater than 10 dollars")
+
+      expect((await treasuryPool.getUser(owner.address,1)).balance).to.be.equal(2500*10**6);
+      expect((await treasuryPool.getUser(owner.address,1)).deposit).to.be.equal(1000*10**6);
+      await time.increase(60*60)
+      expect(await treasuryPool.calculateDaysElapsedToClaim(owner.address,1)).to.be.equal(0)
+      await time.increase(24*60*60)
+      expect(await treasuryPool.timeUntilNextWithdrawal(owner.address,1)).to.be.within((days-25*60*60)-5,(days-25*60*60)+5)
+      expect(await treasuryPool.calculateDaysElapsedToClaim(owner.address,1)).to.be.equal(1)
+      expect((await treasuryPool.getUser(owner.address,1)).daysPaid).to.be.equal(0)
+      await expect(treasuryPool.claimContribution(1)).to.be.revertedWith("Minimum accumulated to claim is 10% of participation")
+
+      expect((await treasuryPool.getUser(owner.address,1)).daysPaid).to.be.equal(0)
+
+      expect(await treasuryPool.calculateDaysElapsedToClaim(owner.address,1)).to.be.equal(1)
+      await time.increase(10*24*60*60)
+      await treasuryPool.claimContribution(1)
+      expect((await treasuryPool.getUser(owner.address,1)).daysPaid).to.be.equal(11)
+
+      expect(await treasuryPool.calculateDaysElapsedToClaim(owner.address,1)).to.be.equal(0)
+      expect(await treasuryPool.timeUntilNextWithdrawal(owner.address,1)).to.be.equal(0)
+      await treasuryPool.claimContribution(1)
+
+      expect((await treasuryPool.getUser(owner.address,1)).daysPaid).to.be.equal(11)
+      await time.increase(200*24*60*60)
+      const claim = await treasuryPool.previewClaim(owner.address,1)
+      expect(claim[0]).to.be.equal(2316666666n);
       
-    })
+      await treasuryPool.claimContribution(1)
+      expect((await treasuryPool.getUser(owner.address,1)).daysPaid).to.be.equal(150)
+
+      await time.increase(200*24*60*60)
+      await expect(treasuryPool.claimContribution(1)).to.be.revertedWith("Already claimed")
+
+
+      const tx = await treasuryPool.contribute(10*10**6)
+      
+      expect(await treasuryPool.userTotalContributions(owner.address)).to.be.equal(2)
+      await time.increase(10*24*60*60)
+      await expect(treasuryPool.claimContribution(2)).to.be.revertedWith("Minimum accumulated to claim is 10 dollars")    
+      await time.increase(130*24*60*60)
+      await treasuryPool.claimContribution(2)
+      await time.increase(12*24*60*60)
+
+      await treasuryPool.claimContribution(2)
+      expect(await treasuryPool.userTotalEarned(owner.address)).to.be.equal(2524999997n);
+      await usdt.connect(otherAccount).mint(100*10**6)
+      await usdt.connect(otherAccount).approve(treasuryPoolAddress,100*10**6)
+      // await expect(treasuryPool.connect(otherAccount).contribute(100*10**6)).to.be.revertedWith("User not verified face id")
+      
+      
+    }); 
+    it("Should create donation usdt", async function () {
+      const {
+        owner,
+        otherAccount,
+        treasuryPool,
+        dolGlobal,
+        treasuryPoolAddress,
+        usdt,
+        balance,
+        poolManager,
+        rechargePool,userRefferalAddress
+      } = await loadFixture(deployFixture);
+      expect(await dolGlobal.balanceOf(treasuryPoolAddress)).to.be.equal(ethers.parseUnits("49500000", "ether"))
+      expect(await treasuryPool.distributionBalance()).to.be.equal(ethers.parseUnits("49500000", "ether"))
+      
+      await usdt.approve(treasuryPoolAddress,200000*10**6)
+      expect(await rechargePool.getTotalTokens()).to.be.equal(0)
+      
+      await treasuryPool.contribute(1000*10**6)
+      await time.increase(69*24*60*60)
+      await treasuryPool.claimContribution(1)
+      console.log(await treasuryPool.timeUntilNextWithdrawal(owner.address,1));
+      await time.increase(24*60*60*1000)
+      console.log(await treasuryPool.timeUntilNextWithdrawal(owner.address,1));
+
+
+      
+
+  
+
+
+      
+    }); 
+
 
 
 

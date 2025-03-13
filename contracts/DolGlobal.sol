@@ -6,6 +6,6 @@ import { ERC20Burnable } from '@openzeppelin/contracts/token/ERC20/extensions/ER
 
 contract DolGlobal is ERC20, ERC20Burnable {
     constructor() ERC20('DolGlobal', 'DOL') {
-        _mint(msg.sender, 100000000 * 10 ** decimals());
+        _mint(msg.sender, 300000000 * 10 ** decimals());
     }
 }
