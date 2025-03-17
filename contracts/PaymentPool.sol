@@ -57,6 +57,7 @@ abstract contract PaymentPool is Ownable2Step, ReentrancyGuard {
     }
 
     function addToken(address token, string calldata name) external onlyOwner {
+        require(!isValidToken(token), 'Token already registered');
         require(token != address(0), 'Token address cannot be zero');
         require(bytes(name).length > 0, 'Token name cannot be empty');
         tokenNames[token] = name;
