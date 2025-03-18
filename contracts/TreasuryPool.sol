@@ -101,7 +101,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
         if (userDonation.daysPaid + daysElapsed == MAX_PERIOD) {
             return 0;
         }
-        uint balance = users[msg.sender][index].deposit;
+        uint balance = users[user][index].deposit;
         uint roof = 10e6;
         if (balance >= 1000e6) {
             roof = balance / 10;
@@ -332,7 +332,7 @@ contract TreasuryPool is ReentrancyGuard, Ownable2Step {
             return (amount);
         }
         uint roof = 10e6;
-        uint balance = users[msg.sender][index].deposit;
+        uint balance = users[user][index].deposit;
         if (balance >= 1000e6) {
             roof = balance / 10;
         }
